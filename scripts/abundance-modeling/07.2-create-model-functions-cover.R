@@ -4,6 +4,10 @@ library(ordbetareg)
 library(modelsummary)
 library(dplyr)
 
+# NOTE, changing tidal height here from random effect to fixed categorical
+# effect to give them fixed random intercepts that don't matter which is
+# the highest or lowest
+
 # Create Functions to Map on data -------------------------------------------------
 make_prior <- function(df){
   mean_transformed <- c(brms::logit_scaled(mean(df$percent_cover_beta)))
@@ -14,15 +18,16 @@ make_prior <- function(df){
 }
 
 find_regression_slopes <- function(df,prior){
-  ordbetareg(percent_cover_beta ~ year_zero + (1|tidalheight),
+  ordbetareg(percent_cover_beta ~ year_zero + tidalheight,
              data=df, 
              true_bounds = c(0,1),
              chains=4,iter=4000,refresh=0,
              cores = 4,
-             control = list(adapt_delta = 0.99)#,
-             #backend = "cmdstanr"
-  )
+             control = list(adapt_delta = 0.99),
+            # backend = "cmdstanr"
+            )
 }
+
 
 extract_slope <- function(model){
   fixef(model)["year_zero","Estimate"]
@@ -60,7 +65,7 @@ extract_marginal_effects <- function(model){
 
 predict_model <- function(model){
   conditional_effects(model, 
-                      effects = c("year_zero"),
+                      effects = c("year_zero:tidalheight"),
                       resolution = length(unique(model$data$year_zero))
   )[[1]][,c("tidalheight","estimate__","lower__","upper__","year_zero")]
 }

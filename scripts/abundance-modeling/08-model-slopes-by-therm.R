@@ -18,7 +18,7 @@ counts <- readRDS(
   here::here(
     "data-processed",
     "abundance-data",
-    "abundance_change_slopes_counts.rds"
+    "abundance_change_slopes_counts_cattidalheight.rds"
   )
 ) %>%
   select(-data, -model)
@@ -28,7 +28,7 @@ counts_tweedie <- readRDS(
   here::here(
     "data-processed",
     "abundance-data",
-    "abundance_change_slopes_counts_tweedie.rds"
+    "abundance_change_slopes_counts_tweedie_cattidalheight.rds"
   )
 ) %>%
   left_join(counts %>% select(organism, mean_monthly_mean)) %>%
@@ -39,7 +39,7 @@ cover <- readRDS(
   here::here(
     "data-processed",
     "abundance-data",
-    "abundance_change_slopes_cover.rds"
+    "abundance_change_slopes_cover_cattidalheight.rds"
   )
 ) %>%
   select(-data, -model)
@@ -67,13 +67,13 @@ shared_spp <- unique(cover$organism)[unique(cover$organism) %in% unique(counts$o
 
 
 # make annotation coords --------------------------------------------------
-ann_y <- .24
+ann_y <- .26
 
 # plot counts -------------------------------------------------------------
 counts_mod <- lm(data = counts,
                  "slope ~ mean_monthly_mean")
 summary(counts_mod)
-plot(counts_mod)
+#plot(counts_mod)
 
 counts_mod_au <- broom::augment(counts_mod,
                                 counts,
@@ -160,7 +160,8 @@ counts_p <-
            lineheight = .8,
            label = paste0("coefficient: ",
                           round(counts_mod$coefficients["mean_monthly_mean"],3),
-                          "\np < 0.01")  ) 
+                          "\np < 0.01")  ) +
+  theme(panel.grid = element_blank())
 
 
 counts_p
@@ -258,7 +259,8 @@ cover_p <-
            label = paste0("coefficient: ",
                           round(cover_mod$coefficients["mean_monthly_mean"],3),
                           "\np < 0.05")
-  ) 
+  ) +
+  theme(panel.grid = element_blank())
 
 cover_p
 
@@ -444,7 +446,8 @@ counts_p_tweedie <- counts_mod_tweedie_au %>%
   # theme(legend.position = "bottom") +
   geom_rug(data = temp,
            inherit.aes = F,
-           aes(x = mean))
+           aes(x = mean)) +
+  theme(panel.grid = element_blank())
 
 counts_p_tweedie
 
@@ -508,7 +511,9 @@ counts_mod_tweedie_au %>%
           stat = "unique") +
   geom_ribbon( alpha = .2,
                show.legend = F,
-               aes(fill = group,
+               fill = "grey50",
+               aes(group = group,
+                   color = group,
                    ymin = .lower,
                    ymax = .upper)) +
   geom_line(aes(y = .fitted,
@@ -520,7 +525,6 @@ counts_mod_tweedie_au %>%
              color = "black",
              aes(fill = group)) +
   
-  facet_wrap(~group) +
   gghighlight::gghighlight(use_direct_label = F) +
   
   scale_fill_manual(values = c("darkmagenta",
@@ -547,7 +551,7 @@ counts_mod_tweedie_au %>%
 counts_p_compare_2
 
 counts_p_compare_2 +
-  canvas(width= 7,
+  canvas(width= 4.5,
          height = 4,
          unit = "in")
 
@@ -562,25 +566,345 @@ ggsave(counts_p_compare_2,
 
 
 
+# -------------------------------------------------------------------------
 # repeat with other thermal affinity metrics ------------------------------------------------
+# -------------------------------------------------------------------------
+
+
+# first for min monthly temps
+min_plot_base <- ggplot() +
+  annotate(geom = "rect",
+           xmin = quantile(temp$min,.1)[[1]],
+           xmax  = quantile(temp$min,.9)[[1]],
+           ymin = -Inf,
+           ymax = Inf,
+           fill = "grey85",
+           alpha = .5)  +
+  geom_rug(data = temp,
+           aes(x = min)) +
+  scale_x_continuous(labels = ~paste0(.,"°")) +
+  labs(x = "Thermal Affinity Minimum",
+       y = "Coefficient of Change") +
+  coord_cartesian(xlim = c(
+    min(counts$mean_monthly_min, cover$mean_monthly_min, na.rm=T),
+    max(counts$mean_monthly_min, cover$mean_monthly_min, na.rm=T)
+   ),
+   ylim = c(
+     max(counts$slope, cover$slope) *-1,
+     max(counts$slope, cover$slope)
+   )) +
+  theme(panel.grid = element_blank())
+
+# model for count species
 counts_mod_min <- lm(data = counts,
-                 "slope ~ mean_monthly_min")
+                     "slope ~ mean_monthly_min")
 summary(counts_mod_min)
-cover_mod_min <- lm(data = cover,
+counts_min_au <- broom::augment(counts_mod_min,
+                                counts, 
+                                interval = "confidence")
+# make plot
+plot_min_counts <- min_plot_base + 
+  geom_ribbon(data = counts_min_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_min),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = counts_min_au,
+            aes(x = mean_monthly_min,
+                y = .fitted)) +
+  geom_point(data = counts_min_au,
+              aes(x = mean_monthly_min,
+                  y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+    geom_hline(yintercept = 0,
+             linetype = "longdash") +
+  labs(title = "Density Group") +
+  annotate(geom = "text",
+           x = 10,
+           y = -.25,
+           hjust = 1,
+           vjust = 0,
+           #fontface = "bold",
+           label = "model p = 0.11",
+           size = 3) 
+plot_min_counts
+
+# repeat for cover species
+cover_mod_min <- lm(data = cover %>% filter(!is.na(mean_monthly_min)),
                      "slope ~ mean_monthly_min")
 summary(cover_mod_min)
+cover_min_au <- broom::augment(cover_mod_min,
+                                cover %>% filter(!is.na(mean_monthly_min)), 
+                                interval = "confidence")
 
+# make plot
+plot_min_cover <- min_plot_base + 
+  geom_ribbon(data = cover_min_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_min),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = cover_min_au,
+            aes(x = mean_monthly_min,
+                y = .fitted)) +
+  geom_point(data = cover_min_au,
+             aes(x = mean_monthly_min,
+                 y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+  geom_hline(yintercept = 0,
+             linetype = "longdash") +
+  labs(title = "Percent Cover Group") +
+  annotate(geom = "text",
+           x = 10,
+           y = -.25,
+           hjust = 1,
+           vjust = 0,
+        #   fontface = "bold",
+           label = "model p = 0.08",
+        size = 3) 
+plot_min_cover
+
+( plot_min_counts | plot_min_cover ) + ggview::canvas(8,4)
+
+
+# repeat with mean ---------------------------------------------------------
+# first for min monthly temps
+mean_plot_base <- ggplot() +
+  annotate(geom = "rect",
+           xmin = quantile(temp$mean,.1)[[1]],
+           xmax  = quantile(temp$mean,.9)[[1]],
+           ymin = -Inf,
+           ymax = Inf,
+           fill = "grey85",
+           alpha = .5)  +
+  geom_rug(data = temp,
+           aes(x = mean)) +
+  scale_x_continuous(labels = ~paste0(.,"°")) +
+  labs(x = "Thermal Affinity Mean",
+       y = "Coefficient of Change") +
+  coord_cartesian(xlim = c(
+    min(counts$mean_monthly_mean, cover$mean_monthly_mean, na.rm=T),
+    max(counts$mean_monthly_mean, cover$mean_monthly_mean, na.rm=T)
+  ),
+  ylim = c(
+    max(counts$slope, cover$slope) *-1,
+    max(counts$slope, cover$slope)
+  )) +
+  theme(panel.grid = element_blank())
+mean_plot_base
+
+# model for count species
+counts_mod_mean <- lm(data = counts,
+                     "slope ~ mean_monthly_mean")
+summary(counts_mod_mean)
+counts_mean_au <- broom::augment(counts_mod_mean,
+                                counts, 
+                                interval = "confidence")
+# make plot
+plot_mean_counts <- mean_plot_base + 
+  geom_ribbon(data = counts_mean_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_mean),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = counts_mean_au,
+            aes(x = mean_monthly_mean,
+                y = .fitted)) +
+  geom_point(data = counts_mean_au,
+             aes(x = mean_monthly_mean,
+                 y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+  geom_hline(yintercept = 0,
+             linetype = "longdash") +
+ # labs(title = "Count Species") +
+  annotate(geom = "text",
+           x = 14.1,
+           y = -.23,
+           hjust = 1,
+           vjust = 0,
+           fontface = "bold",
+           label = "model p < 0.01**",
+           size = 3)
+plot_mean_counts
+
+# repeat for cover species
+cover_mod_mean <- lm(data = cover %>% filter(!is.na(mean_monthly_mean)),
+                    "slope ~ mean_monthly_mean")
+summary(cover_mod_mean)
+cover_mean_au <- broom::augment(cover_mod_mean,
+                               cover %>% filter(!is.na(mean_monthly_mean)), 
+                               interval = "confidence")
+
+# make plot
+plot_mean_cover <- mean_plot_base + 
+  geom_ribbon(data = cover_mean_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_mean),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = cover_mean_au,
+            aes(x = mean_monthly_mean,
+                y = .fitted)) +
+  geom_point(data = cover_mean_au,
+             aes(x = mean_monthly_mean,
+                 y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+  geom_hline(yintercept = 0,
+             linetype = "longdash") +
+ # labs(title = "Cover Species") +
+  annotate(geom = "text",
+           x = 14.1,
+           y = -.23,
+           hjust = 1,
+           vjust = 0,
+           fontface = "bold",
+           label = "model p < 0.05*",
+           size = 3)
+plot_mean_cover
+
+( plot_mean_counts | plot_mean_cover ) + ggview::canvas(8,4)
+
+
+
+# repeat with max ---------------------------------------------------------
+# first for min monthly temps
+max_plot_base <- ggplot() +
+  annotate(geom = "rect",
+           xmin = quantile(temp$max,.1)[[1]],
+           xmax  = quantile(temp$max,.9)[[1]],
+           ymin = -Inf,
+           ymax = Inf,
+           fill = "grey85",
+           alpha = .5)  +
+  geom_rug(data = temp,
+           aes(x = max)) +
+  scale_x_continuous(labels = ~paste0(.,"°")) +
+  labs(x = "Thermal Affinity Maximum",
+       y = "Coefficient of Change") +
+  coord_cartesian(xlim = c(
+    min(counts$mean_monthly_max, cover$mean_monthly_max, na.rm=T),
+    max(counts$mean_monthly_max, cover$mean_monthly_max, na.rm=T)
+  ),
+  ylim = c(
+    max(counts$slope, cover$slope) *-1,
+    max(counts$slope, cover$slope)
+  )) +
+  theme(panel.grid = element_blank())
+max_plot_base
+
+# model for count species
 counts_mod_max <- lm(data = counts,
                      "slope ~ mean_monthly_max")
 summary(counts_mod_max)
-cover_mod_max <- lm(data = cover,
+counts_max_au <- broom::augment(counts_mod_max,
+                                counts, 
+                                interval = "confidence")
+# make plot
+plot_max_counts <- max_plot_base + 
+  geom_ribbon(data = counts_max_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_max),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = counts_max_au,
+            aes(x = mean_monthly_max,
+                y = .fitted)) +
+  geom_point(data = counts_max_au,
+             aes(x = mean_monthly_max,
+                 y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+  geom_hline(yintercept = 0,
+             linetype = "longdash") +
+ # labs(title = "Count Species") +
+  annotate(geom = "text",
+           x = 21.6,
+           y = -.23,
+           hjust = 1,
+           vjust = 0,
+           fontface = "bold",
+           label = "model p < 0.05*",
+           size = 3)
+plot_max_counts
+
+# repeat for cover species
+cover_mod_max <- lm(data = cover %>% filter(!is.na(mean_monthly_max)),
                     "slope ~ mean_monthly_max")
 summary(cover_mod_max)
+cover_max_au <- broom::augment(cover_mod_max,
+                               cover %>% filter(!is.na(mean_monthly_max)), 
+                               interval = "confidence")
 
-counts_mod_med <- lm(data = counts,
-                     "slope ~ median_monthly_mean")
-summary(counts_mod_med)
-cover_mod_med <- lm(data = cover,
-                    "slope ~ median_monthly_mean")
-summary(cover_mod_med)
+# make plot
+plot_max_cover <- max_plot_base + 
+  geom_ribbon(data = cover_max_au,
+              aes(ymin = .lower,
+                  ymax = .upper,
+                  x = mean_monthly_max),
+              fill = "cyan3",
+              alpha = .5) +
+  geom_line(data = cover_max_au,
+            aes(x = mean_monthly_max,
+                y = .fitted)) +
+  geom_point(data = cover_max_au,
+             aes(x = mean_monthly_max,
+                 y = slope),
+             shape = 21, 
+             size = 1.75,
+             stroke = .25,
+             fill = "cyan3") +
+  geom_hline(yintercept = 0,
+             linetype = "longdash") +
+#  labs(title = "Cover Species") +
+  annotate(geom = "text",
+           x = 21.6,
+           y = -.23,
+           hjust = 1,
+           vjust = 0,
+           #fontface = "bold",
+           label = "model p = 0.13",
+           size = 3)
+plot_max_cover
+
+( plot_max_counts | plot_max_cover ) + ggview::canvas(8,4)
+
+
+
+# arrange all -------------------------------------------------------------
+theme_set(theme_bw(base_size = 10) +
+            theme(axis.title.x = element_text(margin = margin(b=-4, t =1,0,0,"pt"))))
+full_p <- (((plot_min_counts | plot_min_cover) + plot_layout(axis_title = "collect",
+                                                   axes = "collect")) / 
+  ((plot_mean_counts + theme(panel.border = element_rect(linewidth = 1.7)) |
+      plot_mean_cover + theme(panel.border = element_rect(linewidth = 1.7)))+ 
+     plot_layout(axis_title = "collect",
+                                                     axes = "collect")) / 
+  ((plot_max_counts +theme(panel.border = element_rect(linewidth = 1.7)) |
+                             plot_max_cover)+ plot_layout(axis_title = "collect",
+                                                   axes = "collect"))) 
+
+full_p + ggview::canvas(4,6)
+ggsave("outputs/abundance-change/abundance_by_t_all_metrics.png",
+       width = 4,
+       height = 6,
+       unit = "in")
 

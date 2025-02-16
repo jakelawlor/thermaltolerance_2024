@@ -466,6 +466,59 @@ ggsave(p2.2,
        height = 4,
        unit = "in")
 
+p2.2.2 <- no_zero_augment %>% 
+  left_join(richness_no_zeros_by_level)  %>%
+  arrange(tidalheight, year) %>%
+  ggplot(aes(x = .fitted,
+             y = tidalheight,
+             group = tidalheight_f,
+             color = year)) +
+  geom_point(aes(x = mean_richness),
+             size = 3,
+             stroke = 2.5,
+             shape = "|",
+             alpha = .9) +
+  geom_path(data = . %>%  ungroup() %>% 
+              filter(year == min(year))%>%
+              arrange(tidalheight_f),
+            aes(group = NULL),
+            color = "black") +
+  scale_color_gradient(low = "grey40",
+                       high = "cyan3") +
+  geom_path(arrow = arrow(length = unit(6,"pt"),
+                          type = "open"),
+           # position = position_nudge(y = .07),
+            color = "black",
+            linewidth = 1,
+            linejoin = "mitre") +
+  theme(legend.position = c(.97,.98),
+        legend.justification = c(1,1),
+        legend.direction = "horizontal",
+        legend.background = element_blank(),
+        legend.key.height = unit(5,"pt"),
+        legend.key.width = unit(30,"pt")) +
+  labs(x = "Effort-Corrected Species Richness",
+       y = "Tidal Height (m)",
+       color = "Sample Year",
+       title = "Richness Across Shore Levels") +
+  guides(color = guide_colorbar(
+    theme = theme(legend.title.position = "top"))
+  ) +
+  scale_x_continuous(breaks = scales::pretty_breaks()) +
+  coord_cartesian(xlim = c(-.1,10.5),
+                  ylim = c(-1,5),
+                  expand = F,
+                  clip = "off") +
+  theme(panel.grid = element_blank())
+
+p2.2.2 + ggview::canvas(4,4)
+
+ggsave(p2.2.2, 
+       filename = "outputs/richness_change/p2.2.2_no_zeros.png",
+       width = 4,
+       height = 4,
+       unit = "in")
+
 p3 <- no_zero_augment %>%
   left_join(richness_no_zeros_by_level) %>%
   #filter(year %in% c(1982, 1990, 2000, 2010, 2020)) %>%
@@ -498,7 +551,7 @@ p3 <- no_zero_augment %>%
   labs(x = "Effort-Corrected Species Richness",
        y = "Tidal Height (m)",
        color = "Sample Year",
-       title = "Richness Change Across Tidalheights") +
+       title = "Richness Across Shore Levels") +
   guides(color = guide_colorbar(
     theme = theme(legend.title.position = "top"))
   ) +

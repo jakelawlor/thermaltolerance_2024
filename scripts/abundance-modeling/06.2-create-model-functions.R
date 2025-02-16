@@ -90,17 +90,17 @@ predict_model <- function(model){
 
 # test on subset ----------------------------------------------------------
 
-data <- readr::read_csv(
-  here::here("data-processed",
-             "abundance-data",
-             "count-data-prepped-for-model.csv")
-)
-
-testdf <- data %>%
-  filter(organism == "Cancer borealis") %>%
-  mutate(tidalheight = as.character(tidalheight))
-
-# 5.2 Test functions on subset --------------------------------------------
+#data <- readr::read_csv(
+#  here::here("data-processed",
+#             "abundance-data",
+#             "count-data-prepped-for-model.csv")
+#)
+#
+#testdf <- data %>%
+#  filter(organism == "Cancer borealis") %>%
+#  mutate(tidalheight = as.character(tidalheight))
+#
+## 5.2 Test functions on subset --------------------------------------------
 # 
 # testmod <- find_regression_slopes(testdf)
 # extract_slope(testmod)

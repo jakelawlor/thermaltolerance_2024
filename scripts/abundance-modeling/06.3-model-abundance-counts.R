@@ -16,7 +16,7 @@ data <- readr::read_csv(
   here::here("data-processed",
              "abundance-data",
              "count-data-prepped-for-model.csv")
-)
+) %>% mutate(tidalheight = as.character(tidalheight))
 data %>% glimpse()
 
 
@@ -28,31 +28,31 @@ data %>% glimpse()
 # so models won't converge. 
 # Separate dataset into species found in >2 tidal tidalheights or not.
 
-
+## going to try to ignore this for now because I think models will 
+# converge better now. 
 # separate species only present in one or two levels
-counts_mult <- data %>%
-  group_by(organism,level) %>% nest() %>% 
-  group_by(organism) %>% add_count() %>%
-  filter(n>2) %>%
-  select(-n) %>%
-  unnest(data) %>%
-  # change tidal height to a categorical variable
-  mutate(tidalheight = as.character(tidalheight))
-counts_mult %>% distinct(organism)
-# 25 species
+#counts_mult <- data %>%
+#  group_by(organism,level) %>% nest() %>% 
+#  group_by(organism) %>% add_count() %>%
+#  filter(n>2) %>%
+#  select(-n) %>%
+#  unnest(data) %>%
+#  # change tidal height to a categorical variable
+#  mutate(tidalheight = as.character(tidalheight))
+#counts_mult %>% distinct(organism)
+## 25 species
 
-counts_sing <- data %>%
-  group_by(organism,level) %>% nest() %>% 
-  group_by(organism) %>% add_count() %>%
-  filter(n<=2) %>%
-  select(-n) %>%
-  unnest(data) %>%
-  # change tidal height to a categorical variable
-  mutate(tidalheight = as.character(tidalheight))
-counts_sing %>% distinct(organism)
-# 1 species total was found in 2 or fewer levels
+#counts_sing <- data %>%
+#  group_by(organism,level) %>% nest() %>% 
+#  group_by(organism) %>% add_count() %>%
+#  filter(n<=2) %>%
+#  select(-n) %>%
+#  unnest(data) %>%
+#  # change tidal height to a categorical variable
+#  mutate(tidalheight = as.character(tidalheight))
+#counts_sing %>% distinct(organism)
+## 1 species total was found in 2 or fewer levels
 
-rm(data)
 
 
 # make a df to test on ----------------------------------------------------
@@ -75,10 +75,15 @@ source(here::here(
   "06.2-create-model-functions.R"
 ))
 
+testdf <- data %>%
+  filter(organism == unique(data$organism)[1])
+
+mod <- find_regression_slopes(testdf)
+summary(mod)
 
 
 # model multi-tidal-height species ----------------------------------------
-int_counts_models_fixed <- counts_mult %>%
+int_counts_models_fixed <- data %>%
   
   group_by(organism) %>%
   nest() %>%
@@ -139,87 +144,89 @@ int_counts_coefs %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 
+# No longer need to do this with fixed effect model:
 # 7. Repeat for level-constrained species ----------------------------------
 # since 2 species were seen in 2 or fewer todai heights, we will model them separately
 # without an effect of tidalheight becuase it wouldn't be doing anything.
-
-# 7.2 apply new functions to level-constricted species --------------------
-counts_sing2 <- counts_sing #%>%
-
-  # add in the one that didn't converge above
- # rbind(counts_mult %>%
-#          filter(organism == "Pagurus acadianus"))
-# note, we didn't get model convergance issues with the fixed effect
-# model, so no longer going to do this here
-
-
-int_counts_models_few <- counts_sing2 %>%
-  
-  group_by(organism) %>%
-  nest() %>%
-  
-  mutate(
-    # mutate a column with full model details
-    model = map(.x = data,
-                .f = find_regression_slopes_few)
-  )
-
-
-int_counts_coefs_few <- int_counts_models_few %>%
-  
-  mutate(
-    
-    # extract coef and intercept
-    slope = map_dbl(model,extract_slope),
-    slope_se = map_dbl(model,extract_slope_se),
-    slope_q2.5 = map_dbl(model,extract_slope_q2.5),
-    slope_q97.5 = map_dbl(model,extract_slope_q97.5),
-    #intercept = map_dbl(model,extract_intercept_few),
-    margeffs = map(model, extract_marginal_effects_few),
-    pred = map(model, predict_model_few)
-    
-  ) %>%
-  unnest(margeffs) %>%
-  arrange(slope)  %>%
-  ungroup() %>%
-  mutate(organism = forcats::fct_reorder(organism, slope))
-
-
-
-# plot slopes and color those that the conf.int doesn't pass zero
-int_counts_coefs_few %>% glimpse()
-
-
-
-int_counts_coefs_few %>%
-  select(organism, slope, slope_se, estimate, slope_q2.5, slope_q97.5) %>%
-  mutate(organism = forcats::fct_reorder(organism, slope)) %>%
-  ggplot(aes(x=organism, y = slope)) +
-  geom_hline(yintercept = 0) +
-  # geom_segment(aes(xend = name, 
-  #                   y = slope_q2.5, yend = slope_q97.5)) +
-  geom_segment(aes(xend = organism, 
-                   y = slope - slope_se,
-                   yend = slope + slope_se,
-                   color = abs(slope) > abs(slope_se))) +
-  geom_point(aes(color = abs(slope) > abs(slope_se))) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-
-
-int_counts_coefs %>%
-  filter(organism =="Pagurus acadianus")
-
+#
+## 7.2 apply new functions to level-constricted species --------------------
+#counts_sing2 <- counts_sing #%>%
+#
+#  # add in the one that didn't converge above
+# # rbind(counts_mult %>%
+##          filter(organism == "Pagurus acadianus"))
+## note, we didn't get model convergance issues with the fixed effect
+## model, so no longer going to do this here
+#
+#
+#int_counts_models_few <- counts_sing2 %>%
+#  
+#  group_by(organism) %>%
+#  nest() %>%
+#  
+#  mutate(
+#    # mutate a column with full model details
+#    model = map(.x = data,
+#                .f = find_regression_slopes_few)
+#  )
+#
+#
+#int_counts_coefs_few <- int_counts_models_few %>%
+#  
+#  mutate(
+#    
+#    # extract coef and intercept
+#    slope = map_dbl(model,extract_slope),
+#    slope_se = map_dbl(model,extract_slope_se),
+#    slope_q2.5 = map_dbl(model,extract_slope_q2.5),
+#    slope_q97.5 = map_dbl(model,extract_slope_q97.5),
+#    #intercept = map_dbl(model,extract_intercept_few),
+#    margeffs = map(model, extract_marginal_effects_few),
+#    pred = map(model, predict_model_few)
+#    
+#  ) %>%
+#  unnest(margeffs) %>%
+#  arrange(slope)  %>%
+#  ungroup() %>%
+#  mutate(organism = forcats::fct_reorder(organism, slope))
+#
+#
+#
+## plot slopes and color those that the conf.int doesn't pass zero
+#int_counts_coefs_few %>% glimpse()
+#
+#
+#
+#int_counts_coefs_few %>%
+#  select(organism, slope, slope_se, estimate, slope_q2.5, slope_q97.5) %>%
+#  mutate(organism = forcats::fct_reorder(organism, slope)) %>%
+#  ggplot(aes(x=organism, y = slope)) +
+#  geom_hline(yintercept = 0) +
+#  # geom_segment(aes(xend = name, 
+#  #                   y = slope_q2.5, yend = slope_q97.5)) +
+#  geom_segment(aes(xend = organism, 
+#                   y = slope - slope_se,
+#                   yend = slope + slope_se,
+#                   color = abs(slope) > abs(slope_se))) +
+#  geom_point(aes(color = abs(slope) > abs(slope_se))) +
+#  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+#
+#
+#int_counts_coefs %>%
+#  filter(organism =="Pagurus acadianus")
+#
 
 # 8. merge datasets -------------------------------------------------------
 int_counts_coefs_full <- 
-  int_counts_coefs %>%
+  int_counts_coefs #%>%
  # filter(organism != "Pagurus acadianus") %>%
-  rbind(int_counts_coefs_few  )
+ # rbind(int_counts_coefs_few  )
 rm(int_counts_coefs, int_counts_coefs_few)
 
+int_counts_coefs_full[1,]$data[[1]] %>% distinct(tidalheight)
+int_counts_coefs_full[1,]$model[[1]] %>% summary()
 
-
-# 9. plot FULL dataset -------------------------------------
+# 9. plot FULL dataset ---glimpse()# 9. plot FULL dataset -------------------------------------
 int_count_coefs_full_plotdf <- int_counts_coefs_full %>% 
   # put organisms in order by slope
   mutate(organism = forcats::fct_reorder(organism, slope)) %>%
@@ -236,10 +243,8 @@ int_count_coefs_full_plotdf <- int_counts_coefs_full %>%
 #  height_char == "3" ~ "Low Intertidal",
 #  n < 3 ~ "Single Level")) %>%
 #mutate(height_char = forcats::fct_reorder(height_char,tidalheight, .desc=T)) %>%
-unnest(data) 
-int_count_coefs_full_plotdf %>% distinct(height_char)
 
-d <- int_counts_coefs_full %>% 
+counts_points <- int_counts_coefs_full %>% 
   select(organism, data) %>%
   unnest(data)
 
@@ -261,15 +266,15 @@ count_trends <- int_count_coefs_full_plotdf2 %>%
                   ymax=upper__,
                   #fill = height_char
   ),
-  fill = "#3499ad",
-  alpha=0.2) +
+  fill = "cyan3",
+  alpha=0.4) +
   geom_hline(yintercept = 0)+
   geom_text(data = . %>% 
               group_by(organism) %>% arrange(desc(upper__)) %>% slice(1) %>%
               mutate(perc_change = round((exp(slope)*100)-100),2),
             aes(#label = round(slope,2),
               label = paste0(perc_change,"%"),
-              x = 1+1985, y = max_y,
+              x = 1+1981, y = max_y,
               hjust = -0.15, vjust = 1),
             size = 4.5,
             stat="unique") +
@@ -309,7 +314,9 @@ count_trends <- int_count_coefs_full_plotdf2 %>%
        title = expression(paste("Density trends over time"))) +
   theme(axis.text.x = element_text(angle= 45, 
                                    hjust = 1, 
-                                   vjust = 1))
+                                   vjust = 1),
+        panel.spacing.x = unit(0.2,"lines"),
+        panel.spacing.y = unit(.2, "lines"))
 
 count_trends + ggview::canvas(13.5, 8)
 

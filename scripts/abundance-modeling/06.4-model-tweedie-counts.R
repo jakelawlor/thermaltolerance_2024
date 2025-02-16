@@ -12,7 +12,7 @@ data <- readr::read_csv(
   here::here("data-processed",
              "abundance-data",
              "count-data-prepped-for-model.csv")
-)
+) %>% mutate(tidalheight = as.character(tidalheight))
 data %>% glimpse()
 
 
@@ -45,12 +45,14 @@ counts_sing %>% distinct(organism)
 
 rm(data)
 
-
-
+i <- 2
+glmmTMB(data = counts_mult %>% filter(organism == unique(counts_mult$organism)[i]),
+        formula = density ~ year_zero + tidalheight,
+        family = tweedie(link = "log"))
 
 # create tweedie modeling functions ---------------------------------------
 find_regression_slopes_tweedie <- function(df){
-  glmmTMB(density ~ year_zero + (1|tidalheight),
+  glmmTMB(density ~ year_zero + tidalheight,
           data=df, family=tweedie(link="log"))
 }
 
@@ -79,9 +81,27 @@ int_counts_models_tweedie <- counts_mult %>%
                 .f = find_regression_slopes_tweedie,
                 .progress = T)
   )
-
-
+# ok, here, models wouldn't converge for 3 species
+# 1. "Anurida maritima"
+# 2. "Asterias forbesi"
+# 3. "Mytilus edulis"
+# actually in all cases, the specific warning was "singular convergence (7)"
+# looks like these errors are caused by tidal heights where there are only zeros
+# let's just ignore for now... maybe later we can remove the levels with 
+# only zeros, but the issue is that these are cases in which the zero-only 
+# levels are between levels that have values. It makes more sense to leave them for now
+# than to lump these into the single-level models.
+int_counts_models_tweedie[int_counts_models_tweedie$organism =="Mytilus edulis", ]$model$convergence
+int_counts_models_tweedie[int_counts_models_tweedie$organism == "Mytilus edulis", ]$data[[1]] %>% 
+  ggplot(aes(x = year, y = density )) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~tidalheight)
+int_counts_models_tweedie[int_counts_models_tweedie$organism == "Mytilus edulis", ]$data[[1]] %>% 
+  group_by(tidalheight) %>% 
+  summarize(max = max(density))
 # find coefficients
+
 int_counts_coefs_tweedie <- int_counts_models_tweedie %>%
   
   mutate(
@@ -132,7 +152,7 @@ saveRDS(tweedie_merge,
         here::here(
           "data-processed",
           "abundance-data",
-          "abundance_change_slopes_counts_tweedie.rds"
+          "abundance_change_slopes_counts_tweedie_cattidalheight.rds"
         ))
 
 

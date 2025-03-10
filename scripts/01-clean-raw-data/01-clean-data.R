@@ -132,6 +132,7 @@ cover <- readr::read_csv(
   janitor::clean_names()
 
 
+# view species names
 cover %>% distinct(organism) %>%
   arrange(organism) %>% pull()
 
@@ -292,6 +293,7 @@ rm(count_taken,
 readr::write_csv(
   both_taken,
   here::here("data-processed",
+             "appledore-survey-data",
              "quadrats_data_taken.csv")
   
 )
@@ -356,6 +358,7 @@ spp_pres <- spp2 %>%
 
 readr::write_csv(spp_pres,
                  here::here("data-processed",
+                            "appledore-survey-data",
                             "pres_spp_list.csv"))
 
 rm(p_orgs, spp_pres)
@@ -365,6 +368,7 @@ rm(p_orgs, spp_pres)
 ## | save P only -------------------------------------------------------------
 readr::write_csv(p_only,
                  file = here::here("data-processed",
+                                   "appledore-survey-data",
                                    "spp_pres_by_replicate.csv"))
 
 p_only %>% filter(organism == "Crisia eburnea" )
@@ -449,7 +453,7 @@ counts_sep_filt %>% count(in_sample)
 # so ~1% of the data is assumed zeros
 
 
-# plit the counts for a few species just to check them out
+# split the counts for a few species just to check them out
 i <- 2
 counts_sep_filt %>%
   filter(organism == unique(counts_sep_filt$organism)[i]) %>%
@@ -474,6 +478,7 @@ rm(counts_sep)
 ## | save counts filtered ------------------------------------------------
 readr::write_csv(counts_sep_filt,
                  here::here("data-processed",
+                            "appledore-survey-data",
                             "counts_abundance_filtered.csv"))
 # note - 36 species total
 #rm(counts_sep_filt)
@@ -567,6 +572,7 @@ cover_sep_filt %>%
 ## | save cover filtered -----------------------------------------------------
 readr::write_csv(cover_sep_filt,
                  here::here("data-processed",
+                            "appledore-survey-data",
                             "cover_abundance_filtered.csv"))
 cover_sep_filt %>% distinct(organism)
 # 65 species total

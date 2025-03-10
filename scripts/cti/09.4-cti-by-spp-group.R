@@ -16,16 +16,20 @@ pa_therm <- readr::read_csv("data-processed/cti-data/cti-data-all.csv")
 pa_therm_filtered <- readr::read_csv("data-processed/cti-data/cti-data-highly-sampled.csv")
 temptrend <- readr::read_csv("data-processed/cti-data/temp-change-augment.csv")
 tempmod <- readRDS("data-processed/cti-data/temp-change-model.rds")
-traits <- readr::read_csv("data-raw/spp_traits/functional_traits_completed.csv")
-
+traits <- readr::read_csv("data-raw/spp_traits/functional_traits_completed.csv") %>%
+  mutate(trait_group = case_when(motility_adult == "sessile" & group == "Invertebrate" ~ "Sessile Invertebrate",
+                                 motility_adult == "motile" & group == "Invertebrate" ~ "Motile Invertebrate",
+                                 group == "Algae" ~ "Algae"
+  )) %>%
+  rename(organism = gen_spp)
 
 
 pa_therm <- pa_therm %>%
-  left_join(traits %>% rename(organism = gen_spp) %>% 
-              mutate(group = motility_adult))
+  left_join(traits %>% #rename(organism = gen_spp) %>% 
+              mutate(group = trait_group))
 pa_therm_filtered <- pa_therm_filtered %>%
-  left_join(traits %>% rename(organism = gen_spp)%>% 
-              mutate(group = motility_adult))
+  left_join(traits %>% #rename(organism = gen_spp)%>% 
+              mutate(group = trait_group))
 
 
 # calculate CTI by group-----------------------------------------------------------
@@ -95,24 +99,24 @@ p1 <- au1 %>%
              position = position_nudge(x = -.25)) +
   
   # add annotations
-  annotate(geom = "richtext",
-           x = 2023, y = 10,
-           label = glue::glue("<b>CTI Trend:</b> ", 
-                              round(mod1.2$coefficients[["year"]],3)*10,
-                              " °C / decade, p ",
-                              if(summary(mod1.2)$coefficients["year","Pr(>|t|)"] < 0.01){"< 0.01"},
-                              "<br>",
-                              "<b>CTI Offset:</b> ", 
-                              unique(df1$group)[[2]], " +", round(mod1.2$coefficients[["groupsessile"]],2),"°C, p ",
-                              if(summary(mod1.2)$coefficients["groupsessile","Pr(>|t|)"] < 0.01){"< 0.01"},
-                              "<br>",
-                              "<b>Temp. Trend:</b> ",
-                              round(tempmod$coefficients[["year"]],3)*10,
-                              " °C / decade, p ",
-                              if(summary(tempmod)$coefficients["year","Pr(>|t|)"] < 0.01){"< 0.01"},
-           ),
-           hjust = 1,vjust = .5,size = 3.25,label.color = NA,fill = NA) +
-  
+ #annotate(geom = "richtext",
+ #         x = 2023, y = 10,
+ #         label = glue::glue("<b>CTI Trend:</b> ", 
+ #                            round(mod1.2$coefficients[["year"]],3)*10,
+ #                            " °C / decade, p ",
+ #                            if(summary(mod1.2)$coefficients["year","Pr(>|t|)"] < 0.01){"< 0.01"},
+ #                            "<br>",
+ #                            "<b>CTI Offset:</b> ", 
+ #                            unique(df1$group)[[2]], " +", round(mod1.2$coefficients[["groupsessile"]],2),"°C, p ",
+ #                            if(summary(mod1.2)$coefficients["groupsessile","Pr(>|t|)"] < 0.01){"< 0.01"},
+ #                            "<br>",
+ #                            "<b>Temp. Trend:</b> ",
+ #                            round(tempmod$coefficients[["year"]],3)*10,
+ #                            " °C / decade, p ",
+ #                            if(summary(tempmod)$coefficients["year","Pr(>|t|)"] < 0.01){"< 0.01"},
+ #         ),
+ #         hjust = 1,vjust = .5,size = 3.25,label.color = NA,fill = NA) +
+ #
   # labels
   labs(x = NULL,
        y = "Community Thermal Index",
@@ -122,16 +126,20 @@ p1 <- au1 %>%
   theme(legend.position = "inside",
         legend.position.inside = c(.02,.98),
         legend.justification = c(0,1)) +
-  scale_color_manual(values = c("cyan",
-                                "darkcyan"),
+  scale_color_manual(values = RColorBrewer::brewer.pal(3,"Dark2"),
                      labels = ~stringr::str_to_title(.)) +
   
-  scale_fill_manual(values = c("cyan",
-                                "darkcyan"),
-                    labels = ~stringr::str_to_title(.))
+  scale_fill_manual(values = RColorBrewer::brewer.pal(3,"Dark2"),
+                    labels = ~stringr::str_to_title(.)) +
+  labs("Overall CTI by Group")
 
 p1 + ggview::canvas(4,4)
+ggsave(p1, 
+       filename = "outputs/cti/total_cti_by_group.png",
+       width = 4, height = 4)
 
+saveRDS(p1, 
+       file = "outputs/cti/total_cti_by_group.rds")
 
 
 

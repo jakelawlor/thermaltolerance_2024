@@ -77,5 +77,6 @@ readr::write_csv(
   data_sum,
   here::here(
   "data-processed",
+  "appledore-island-env-data",
   "appledore_temps_1982_2023.csv"
 ))

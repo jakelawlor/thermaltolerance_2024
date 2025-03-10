@@ -27,13 +27,13 @@ last_temp <- predict(tempmod, list(year= max(pa_therm$year)))
 # make function to test models --------------------------------------------
 test_mods <- function(df){
   mod_add <- lm(data = df,
-                formula = "cti ~ year + tidalheight")
+                formula = cti ~ year + tidalheight)
   mod_mult <- lm(data = df,
-                 formula = "cti ~ year * tidalheight")
+                 formula = cti ~ year * tidalheight)
   cti_add_par <- lm(data = df,
-                    formula = "cti ~ year + I(tidalheight^2)") 
+                    formula = cti ~ year + I(tidalheight^2)) 
   cti_mult_par <- lm(data = df,
-                     formula = "cti ~ year * I(tidalheight^2)")
+                     formula = cti ~ year * I(tidalheight^2))
   perf <- performance::compare_performance(
     mod_add,
     mod_mult,
@@ -737,7 +737,7 @@ p6 <- au6 %>%
   labs(x = "Community Thermal Index",
        y = "Shore Level (m)",
        color = "Sample Year",
-       title = "HS, unsummarized") +
+       title = "All data, unsummarized") +
   guides(color = guide_colorbar(
     theme = theme(legend.title.position = "top"))
   ) +

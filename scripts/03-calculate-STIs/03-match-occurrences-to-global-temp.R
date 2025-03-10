@@ -15,6 +15,7 @@ library(robis)
 spp_pres <- readr::read_csv(
   here::here(
     "data-processed",
+    "appledore-survey-data",
     "pres_spp_list.csv"
   )
 ) %>%
@@ -26,6 +27,7 @@ spp_pres <- readr::read_csv(
 # upload temp data --------------------------------------------------------
 temp <- readRDS(here::here(
   "data-processed",
+  "global-temp-data",
   "global_temps_1982_2023.rds"
 ))
 # note that these are in 1x1 grid cells with the .5 as the
@@ -315,16 +317,19 @@ temp[[1]]%>%
 saveRDS(
   obis_recs_joined,
   file = here::here("data-processed",
+                    "species-thermal-affinities",
                     "obis_recs_matched_temp.rds")
 )
 
 obis_recs_joined <- readRDS( here::here("data-processed",
+                                        "species-thermal-affinities",
                                         "obis_recs_matched_temp.rds"))
 sapply(obis_recs_joined, nrow) %>% unname() %>% sort()
 
 readr::write_csv(
   obis_recs_number,
   here::here("data-processed",
+             "species-thermal-affinities",
              "number_obis_recs_per_spp.csv")
 )
 

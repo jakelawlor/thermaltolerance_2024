@@ -15,26 +15,30 @@ tempmod <- readRDS("data-processed/cti-data/temp-change-model.rds")
 first_temp <- predict(tempmod, list(year= min(pa_therm$year)))
 last_temp <- predict(tempmod, list(year= max(pa_therm$year)))
 traits <- readr::read_csv("data-raw/spp_traits/functional_traits_completed.csv") %>%
-  mutate(motility_adult = stringr::str_to_title(motility_adult))
+  mutate(trait_group = case_when(motility_adult == "sessile" & group == "Invertebrate" ~ "Sessile Invertebrate",
+                                 motility_adult == "motile" & group == "Invertebrate" ~ "Motile Invertebrate",
+                                 group == "Algae" ~ "Algae"
+  )) %>%
+  rename(organism = gen_spp)
 
 pa_therm <- pa_therm %>%
-  left_join(traits %>% rename(organism = gen_spp) %>%
-              mutate(group = motility_adult))
+  left_join(traits %>% #rename(organism = gen_spp) %>%
+              mutate(group = trait_group))
 pa_therm_filtered <- pa_therm_filtered %>%
-  left_join(traits %>% rename(organism = gen_spp) %>%
-              mutate(group = motility_adult))
+  left_join(traits %>% #rename(organism = gen_spp) %>%
+              mutate(group = trait_group))
 
 
 # make function to test models --------------------------------------------
 test_mods <- function(df){
   mod_add <- lm(data = df,
-                formula = "cti ~ year + tidalheight")
+                formula = cti ~ year + tidalheight)
   mod_mult <- lm(data = df,
-                 formula = "cti ~ year * tidalheight")
+                 formula = cti ~ year * tidalheight)
   cti_add_par <- lm(data = df,
-                    formula = "cti ~ year + I(tidalheight^2)") 
+                    formula = cti ~ year + I(tidalheight^2)) 
   cti_mult_par <- lm(data = df,
-                     formula = "cti ~ year * I(tidalheight^2)")
+                     formula = cti ~ year * I(tidalheight^2))
   perf <- performance::compare_performance(
     mod_add,
     mod_mult,
@@ -102,16 +106,22 @@ mod_g1 <- test_mods(df1 %>% filter(group == unique(df1$group)[1]))
 summary(mod_g1)
 mod_g2 <- test_mods(df1 %>% filter(group ==  unique(df1$group)[2]))
 summary(mod_g2)
+mod_g3 <- test_mods(df1 %>% filter(group ==  unique(df1$group)[3]))
+summary(mod_g3)
 
 mod_g1_p <- get_mod_p(mod_g1)
 mod_g2_p <- get_mod_p(mod_g2)
+mod_g3_p <- get_mod_p(mod_g3)
 au_g1 <- broom::augment(mod_g1, 
                       newdata = tidyr::complete(df1 %>% filter(group == unique(df1$group)[1]),year,tidalheight, group), 
                       interval = "prediction")
 au_g2 <- broom::augment(mod_g2, 
                         newdata = tidyr::complete(df1 %>% filter(group == unique(df1$group)[2]),year,tidalheight, group), 
                         interval = "prediction")
-au1 <- rbind(au_g1, au_g2)
+au_g3 <- broom::augment(mod_g3, 
+                        newdata = tidyr::complete(df1 %>% filter(group == unique(df1$group)[3]),year,tidalheight, group), 
+                        interval = "prediction")
+au1 <- rbind(au_g1, au_g2, au_g3)
 
 # plot
 p1 <-  au1 %>% 
@@ -194,7 +204,7 @@ p1 <-  au1 %>%
   labs(x = "Community Thermal Index",
        y = "Shore Level (m)",
        color = "Sample Year",
-       title = "Highly Sampled Data, All Replicates"
+       title = "CTI Change Across Depths for Organism Groups"
   ) +
   guides(color = guide_colorbar(
     theme = theme(legend.title.position = "top"))

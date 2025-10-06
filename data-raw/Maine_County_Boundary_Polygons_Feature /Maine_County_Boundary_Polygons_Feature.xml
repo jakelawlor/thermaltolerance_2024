@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20231103</pubdate>
+                <title>Maine County Boundary Polygons</title>
+                <geoform>vector digital data</geoform>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>Maine County Boundary Polygons contains county boundary polygons for all sixteen counties in Maine, mapped at the 1:24,000 scale. The data layer has polygon topology and was originally created in ArcInfo using METWP24P with a selection on arcs coded "TYPE=state,county, and coastline".</abstract>
+            <purpose>Maine county boundary polygons. (Abbreviation: CNTY24P).</purpose>
+        </descript>
+        <timeperd>
+            <timeinfo>
+                <sngdate>
+                    <caldate>20230701</caldate>
+                </sngdate>
+            </timeinfo>
+            <current>County boundary status as of July 1, 2023.</current>
+        </timeperd>
+        <status>
+            <progress>Complete</progress>
+            <update>As needed</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-71.166757</westbc>
+                <eastbc>-66.781750</eastbc>
+                <northbc>47.460074</northbc>
+                <southbc>42.909625</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>ISO 19115-1:2014</themekt>
+                <themekey>boundaries</themekey>
+            </theme>
+            <theme>
+                <themekt>Maine GIS Thesaurus-Theme</themekt>
+                <themekey>boundaries, towns, townships</themekey>
+            </theme>
+            <theme>
+                <themekt>Maine GIS Thesaurus-Place</themekt>
+                <themekey>Maine, United States</themekey>
+            </theme>
+        </keywords>
+        <accconst>None</accconst>
+        <useconst>Access: Public.Use: User assumes risk.</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>MEGIS</cntorg>
+                    <cntper>Maine Office of Geographic Information Systems</cntper>
+                </cntorgp>
+                <cntpos>GIS Coordinator</cntpos>
+                <cntaddr>
+                    <addrtype>mailing</addrtype>
+                    <address>State House Station #145</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04333</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>207-624-7700</cntvoice>
+                <cntemail>OIT.Customer-Support@maine.gov</cntemail>
+                <hours>0800 - 1700 EST</hours>
+                <cntinst>Monday through Friday</cntinst>
+            </cntinfo>
+        </ptcontac>
+        <datacred>MaineIT GIS</datacred>
+        <native>Esri ArcGIS 12.9.7.32739</native>
+    </idinfo>
+    <dataqual>
+        <logic>Updated July 1, 2023.</logic>
+        <complete>Updated July 1, 2023.</complete>
+        <lineage>
+            <procstep>
+                <procdesc>Updated Knox/Waldo county boundary per P&amp;S Law 2023 S.P. 58 - LD119.</procdesc>
+                <procdate>20230701</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>MEGIS</cntorg>
+                            <cntper>Maine Office of Geographic Information Systems</cntper>
+                        </cntorgp>
+                        <cntpos>GIS Coordinator</cntpos>
+                        <cntaddr>
+                            <addrtype>mailing</addrtype>
+                            <address>State House Station #145</address>
+                            <city>Augusta</city>
+                            <state>ME</state>
+                            <postal>04333</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntvoice>207-624-7700</cntvoice>
+                        <cntemail>OIT.Customer-Support@maine.gov</cntemail>
+                        <hours>0800 - 1700 EST</hours>
+                        <cntinst>Monday through Friday</cntinst>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+        </lineage>
+    </dataqual>
+    <spdoinfo>
+        <direct>Vector</direct>
+        <ptvctinf>
+            <sdtsterm>
+                <sdtstype>GT-polygon composed of chains</sdtstype>
+                <ptvctcnt>0</ptvctcnt>
+            </sdtsterm>
+        </ptvctinf>
+    </spdoinfo>
+    <eainfo>
+        <detailed>
+            <enttyp>
+                <enttypl>Maine County Boundary Polygons Feature</enttypl>
+                <enttypd>polygon feature class</enttypd>
+                <enttypds>Environmental Systems Research Institute, Inc. (ESRI)</enttypds>
+            </enttyp>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef>Feature geometry.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        
+                    <udom>Coordinates defining the features.</udom>
+                                    
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>COUNTY</attrlabl>
+                <attrdef>Maine county name</attrdef>
+                <attrdefs>Federal Information Processing Standards Publication Series of the National Institute of Standards and Technology (NIST) For a current digital copy of "Standard Geocodes for Maine Minor Civil Divisions" in .dbf or comma delimited text format see http://megis.maine.gov/catalog "Tables" link.</attrdefs>
+            </attr>
+            <attr>
+                <attrlabl>LAND</attrlabl>
+                <attrdef>identifies land and non-land areas</attrdef>
+                <attrdefs>MEGIS</attrdefs>
+                <attrdomv>
+                                        
+                    <edom>
+                                                
+                        <edomv>y</edomv>
+                                                
+                        <edomvd>polygon represents land</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>n</edomv>
+                                                
+                        <edomvd>polygon represents fresh, estuarine or marine waters</edomvd>
+                                            
+                    </edom>
+                                    
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ISLAND</attrlabl>
+                <attrdef>identifies island polygons</attrdef>
+                <attrdefs>MEGIS</attrdefs>
+                <attrdomv>
+                                        
+                    <edom>
+                                                
+                        <edomv>y</edomv>
+                                                
+                        <edomvd>coastal, lake or river island</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>n</edomv>
+                                                
+                        <edomvd>non-island</edomvd>
+                                            
+                    </edom>
+                                    
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef>Internal feature number.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        
+                    <udom>Sequential unique whole numbers that are automatically generated.</udom>
+                                    
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>TAG</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>Shape.STLength()</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>GlobalID</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>created_user</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>created_date</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>last_edited_user</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>last_edited_date</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>Shape.STArea()</attrlabl>
+            </attr>
+            <attr>
+                <attrlabl>CNTYCODE</attrlabl>
+                <attrdef>Code corresponds to the federal (FIPS) code established for each of Maine's sixteen counties. The county code is also represented in the first two digits of Maine's official Standard Geographic Code (geocode), a five digit code that uniquely identifies Minor Civil Divisions and Indian Reservation land in the Maine.</attrdef>
+                <attrdefs>Federal Information Processing Standards Publication Series of the National Institute of Standards and Technology (NIST) For a current digital copy of "Standard Geocodes for Maine Minor Civil Divisions" in .dbf or comma delimited text format see http://megis.maine.gov/catalog "Tables" link.</attrdefs>
+                <attrdomv>
+                                        
+                    <edom>
+                                                
+                        <edomv>11</edomv>
+                                                
+                        <edomvd>Kennebec</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>17</edomv>
+                                                
+                        <edomvd>Oxford</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>27</edomv>
+                                                
+                        <edomvd>Waldo</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>29</edomv>
+                                                
+                        <edomvd>Washington</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>07</edomv>
+                                                
+                        <edomvd>Franklin</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>03</edomv>
+                                                
+                        <edomvd>Aroostook</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>13</edomv>
+                                                
+                        <edomvd>Knox</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>05</edomv>
+                                                
+                        <edomvd>Cumberland</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>15</edomv>
+                                                
+                        <edomvd>Lincoln</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>09</edomv>
+                                                
+                        <edomvd>Hancock</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>23</edomv>
+                                                
+                        <edomvd>Sagadahoc</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>25</edomv>
+                                                
+                        <edomvd>Somerset</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>21</edomv>
+                                                
+                        <edomvd>Piscataquis</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>01</edomv>
+                                                
+                        <edomvd>Androscoggin</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>31</edomv>
+                                                
+                        <edomvd>York</edomvd>
+                                            
+                    </edom>
+                                        
+                    <edom>
+                                                
+                        <edomv>19</edomv>
+                                                
+                        <edomvd>Penobscot</edomvd>
+                                            
+                    </edom>
+                                    
+                </attrdomv>
+            </attr>
+        </detailed>
+        <overview>
+            <eaover>POLYGONS in METWP24 are attributed with the items TOWN, COUNTY, GEOCODE, and CNTYCODE as found in "Standard Geographic Codes for Maine Minor Civil Divisions". Like COAST, METWP24 contains the item CIREG flagging those islands whose ISLANDID is also a Maine Department of Conservation, Bureau of Parks and Lands, Coastal Island Registry (CIREG) number. POLYGONS in the coverage are also attributed with the items LAND, ISLAND, ISLANDID, LURC, BAXTER and TAG. ARCS are coded with the items LAND, TYPE, and with Maine GIS recommended feature metadata (FM) items and codes. Initially FM items were coded from the item SOURCE, which has been dropped, and FM items are now maintained with current information as the data is edited. The FM items provide the most specific and accessible information about the sources for location line features, polygon boundaries and arcs, in the data. For more information on Maine GIS Feature Metadata Recommendation and "Standard Geocodes for Maine Minor Civil Divisions" see the Standards &amp; Guildelines link. You may contact the Maine Office of GIS at 207 624-7700 for technical assistance.</eaover>
+            <eadetcit>The ArcView shapefile and ArcGIS geodatabase formats, commonly used for Maine GIS data, carry default identifiers and attributes that are software generated and/or important for internal recordkeeping. These are listed here to avoid repetition for every layer, and may not be repeated in the attribute descriptions and definitions of each layer. Common software generated identifiers and attributes in Maine GIS data include: FID (feature identifier), Shape (feature geometry), OBJECTID and SHAPE_lengt. In addition, most GIS formats will carry fields for PERIMETER, AREA and/or LENGTH according to feature geometry. These fields are typically available by default, with the units based on coordinate system or projection units of GIS data. Most GIS software packages also provide a means to calculate these values. It is important to test any columns containing PERIMETER, AREA or LENGTH values before using them for analysis purposes. These important values can be carried from format to format and become out-dated. Verify that the values are correct. Also, in your GIS software, please view the properties of data layers for the map units used to calculate these fields, and for the units set for display purposes.</eadetcit>
+        </overview>
+    </eainfo>
+    <distinfo>
+        <distrib>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>MEGIS</cntorg>
+                    <cntper>Maine Office of Geographic Information Systems</cntper>
+                </cntorgp>
+                <cntpos>GIS Coordinator</cntpos>
+                <cntaddr>
+                    <addrtype>mailing</addrtype>
+                    <address>State House Station #145</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04333</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>207-624-7700</cntvoice>
+                <cntemail>OIT.Customer-Support@maine.gov</cntemail>
+                <hours>0800 - 1700 EST</hours>
+                <cntinst>Monday through Friday</cntinst>
+            </cntinfo>
+        </distrib>
+        <distliab>Disclaimer:
+
+Information provided by the Maine Office of Geographic Information Systems and Maine GeoLibrary on this site is accurate to the best of our knowledge and is subject to change on a regular basis. While the Maine Office of Geographic Information Systems makes every effort to provide useful and accurate information, we do not warrant the information to be, complete, factual, or timely. Information is provided on an "as is" and an "as available" basis. The State of Maine disclaims any liability, loss, injury, or damage incurred as a consequence, directly or indirectly, resulting from the use and application of any of the contents of this web site.</distliab>
+    </distinfo>
+    <metainfo>
+        <metd>20231103</metd>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>MEGIS</cntorg>
+                    <cntper>Maine Office of Geographic Information Systems</cntper>
+                </cntorgp>
+                <cntpos>GIS Coordinator</cntpos>
+                <cntaddr>
+                    <addrtype>mailing</addrtype>
+                    <address>State House Station #145</address>
+                    <city>Augusta</city>
+                    <state>ME</state>
+                    <postal>04333</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>207-624-7700</cntvoice>
+                <cntemail>OIT.Customer-Support@maine.gov</cntemail>
+                <hours>0800 - 1700 EST</hours>
+                <cntinst>Monday through Friday</cntinst>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+        <metuc>Disclaimer:Information provided by the Maine Office of Geographic Information Systems and Maine GeoLibrary on this site is accurate to the best of our knowledge and is subject to change on a regular basis. While the Maine Office of Geographic Information Systems makes every effort to provide useful and accurate information, we do not warrant the information to be, complete, factual, or timely. Information is provided on an "as is" and an "as available" basis. The State of Maine disclaims any liability, loss, injury, or damage incurred as a consequence, directly or indirectly, resulting from the use and application of any of the contents of this web site.</metuc>
+    </metainfo>
+</metadata>

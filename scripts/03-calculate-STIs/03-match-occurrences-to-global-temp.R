@@ -38,10 +38,12 @@ temp <- readRDS(here::here(
 # isolate names variable
 names <- spp_pres %>% distinct(organism) %>% pull()
 
+taxize::gna_verifier(names) %>% select(submittedName, matchedName, matchType, matchedCanonicalSimple, matchedCanonicalFull)
+
 # use taxize package to confirm all names are correct
-names_clean <- taxize::gnr_resolve(names) %>% 
-  filter(user_supplied_name == matched_name) %>%
-  distinct(matched_name) %>% pull(matched_name) %>% sort()
+names_clean <- taxize::gna_verifier(names) %>% 
+  filter(submittedName == matchedCanonicalSimple) %>%
+  distinct(matchedCanonicalSimple) %>% pull(matchedCanonicalSimple) %>% sort()
 
 setequal(names, names_clean) 
 # ok, both vectors are the same, so all of our names are valid
@@ -99,6 +101,7 @@ obis_recs_raw <- furrr::future_map(
     as_tibble(),
   .progress = T
 )
+obis_recs_raw[[1]]
 
 obis_recs_number <- purrr::map(
   .x = obis_recs_raw,
@@ -107,6 +110,7 @@ obis_recs_number <- purrr::map(
 ) %>%
   bind_rows(.id = "organism") %>%
   rename(obis_recs_raw = value)
+obis_recs_number
   
 
 contains_depth <- purrr::map(
@@ -140,6 +144,7 @@ obis_recs_filt <- purrr::map(
            depth < 0 ~ 0,
            TRUE ~ depth))
 )
+obis_recs_filt[[1]] %>% glimpse()
 
 
 obis_recs_filt2 <- purrr::map(
@@ -179,6 +184,8 @@ obis_recs_with_depth <- purrr::map(
 ) %>%
   bind_rows(.id = "organism") %>%
   rename(obis_recs_with_depth = value)
+
+
 
 obis_recs_number <- obis_recs_number %>%
   left_join(obis_recs_with_depth)

@@ -57,6 +57,7 @@ richness_no_zeros_by_level <-
   summarize(mean_richness = mean(rarified_richness),
             n_transects_sampled = n(),
             .groups = "drop") %>%
+  # exclude tidal heights that were only sampled once
   filter(level >= 0,
          level <= 15)
 
@@ -108,8 +109,6 @@ mod1 <- glm(
   family = Gamma(link = "log"))
 summary(mod1)
 AIC(mod1)
-# no significance of predictors,
-# AIC = 1385.353
 
 # | Mod 2. by year + height ---------------------------------------------------
 mod2 <- glm(
@@ -118,8 +117,6 @@ mod2 <- glm(
   family = Gamma(link = "log"))
 summary(mod2)
 AIC(mod2)
-# significance of tidal height, not year
-# AIC = 1212.117
 
 # | Mod 3. by year * height ---------------------------------------------------
 mod3 <- glm(
@@ -128,46 +125,52 @@ mod3 <- glm(
   family = Gamma(link = "log"))
 summary(mod3)
 AIC(mod3)
-# significance year, tidal height, and interaction
-# AIC = 1209.605
 
 # | Mod 4. by year * height^2 ---------------------------------------------------
 mod4 <- glm(
   data = richness_no_zeros_by_level ,
-  formula = "mean_richness ~ year * I(tidalheight^2)",
+  formula = "mean_richness ~ year + I(tidalheight^2)",
   family = Gamma(link = 'log'))
 summary(mod4)
 AIC(mod4)
-# significance of year, tidal height and interaction
-# AIC = 1102.042
-# rm(mod4)
-# I suppose best so far
 
 # | Mod 5. by year + height^2 ---------------------------------------------------
 mod5 <- glm(
   data = richness_no_zeros_by_level ,
-  formula = "mean_richness ~ year + I(tidalheight^2)",
+  formula = "mean_richness ~ year * I(tidalheight^2)",
   family = Gamma(link = "log"))
 summary(mod5)
 AIC(mod5)
-# significance of tidal height, not year
-# AIC =  1108.072
 
 
 
 
 # | compare models ----------------------------------------------------------
 AIC(mod1, mod2, mod3, mod4, mod5) %>% arrange(AIC)
-MuMIn::AICc(mod1, mod2, mod3, mod4) %>% arrange(AICc)
+MuMIn::AICc(mod1, mod2, mod3, mod4, mod5) %>% arrange(AICc)
 performance::compare_performance(
   mod1, mod2, mod3, mod4, mod5,
   metrics = "all",
   rank =T)
-# model 4 wins in all metrics 
-#plot(mod4)
+# model 5 wins in all metrics 
+#plot(mod5)
 #check_model(mod4) # use this later
-DHARMa::simulateResiduals(mod4) |> 
+DHARMa::simulateResiduals(mod5) |> 
   DHARMa::plotQQunif() # Jarrett says this is ok
+
+
+# check assumptions
+library(performance)
+perf <- plot(check_model(mod5))
+library(patchwork)
+perf <- perf & labs(subtitle = NULL)
+perf
+
+# save 
+ggsave(perf, 
+       filename = "outputs/richness_change/rich_per_level_assumptions.png",
+       width = 12,
+       height = 8)
 
 
 # predict and plot --------------------------------------------------------
@@ -185,7 +188,7 @@ predict_df <- data.frame(
 # https://github.com/jebyrnes/sinterval
 
 
-no_zero_augment <- broom::augment(mod4,
+no_zero_augment <- broom::augment(mod5,
                                   newdata = predict_df,
                                   type.predict = "response",
                                   se_fit = T,
@@ -498,40 +501,40 @@ AIC(mod3_hs)
 # | Mod 4. by year * height^2 ---------------------------------------------------
 mod4_hs <- glm(
   data = richness_no_zeros_by_level_hs ,
-  formula = "mean_richness ~ year * I(tidalheight^2)",
+  formula = "mean_richness ~ year + I(tidalheight^2)",
   family = Gamma(link = 'log'))
 summary(mod4_hs)
 AIC(mod4_hs)
 # significance of year, tidal height and interaction
-# AIC = 1102.042
+# AIC = 1108.072
 # rm(mod4)
 # I suppose best so far
 
 # | Mod 5. by year + height^2 ---------------------------------------------------
 mod5_hs <- glm(
   data = richness_no_zeros_by_level_hs ,
-  formula = "mean_richness ~ year + I(tidalheight^2)",
+  formula = "mean_richness ~ year * I(tidalheight^2)",
   family = Gamma(link = "log"))
 summary(mod5_hs)
 AIC(mod5_hs)
 # significance of tidal height, not year
-# AIC =  1108.072
-
-
+# AIC =  1102.042
 
 
 # | compare models ----------------------------------------------------------
 AIC(mod1_hs, mod2_hs, mod3_hs, mod4_hs, mod5_hs) %>% arrange(AIC)
-MuMIn::AICc(mod1_hs, mod2_hs, mod3_hs, mod4_hs) %>% arrange(AICc)
+MuMIn::AICc(mod1_hs, mod2_hs, mod3_hs, mod4_hs, mod5_hs) #%>% arrange(AICc)
 performance::compare_performance(
   mod1_hs, mod2_hs, mod3_hs, mod4_hs, mod5_hs,
-  metrics = "all",
-  rank =T)
-# model 4 wins in all metrics 
-#plot(mod4)
-#check_model(mod4) # use this later
-DHARMa::simulateResiduals(mod4_hs) |> 
-  DHARMa::plotQQunif() # Jarrett says this is ok
+  metrics = "R2",
+  rank = T)
+# model 5 wins in all metrics 
+
+DHARMa::simulateResiduals(mod5_hs) |> 
+  DHARMa::plotQQunif() 
+
+perf2 <- plot(check_model(mod5_hs))
+
 
 
 # predict and plot --------------------------------------------------------
@@ -549,7 +552,7 @@ predict_df_hs <- data.frame(
 # https://github.com/jebyrnes/sinterval
 
 
-no_zero_augment_hs <- broom::augment(mod4_hs,
+no_zero_augment_hs <- broom::augment(mod5_hs,
                                   newdata = predict_df_hs,
                                   type.predict = "response",
                                   se_fit = T,
@@ -740,6 +743,6 @@ all_rich_p + ggview::canvas(8,4)
 
 ggsave(all_rich_p,
        file = "outputs/richness_change/rich_per_level_all_vs_hs.png",
-       width = 8,
-       height = 4,
+       width = 8*.8,
+       height = 4*.8,
        unit = "in")

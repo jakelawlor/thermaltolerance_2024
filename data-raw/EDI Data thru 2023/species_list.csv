@@ -1,0 +1,215 @@
+AphiaID,valid_name,valid_authority,kingdom,phylum,class,order,family,genus,ID_confidence,comments
+158489,Asterias forbesi,"(Desor, 1848)",Animalia,Echinodermata,Asteroidea,Forcipulatida,Asteriidae,Asterias,high,NA
+123776,Asterias rubens,"Linnaeus, 1758",Animalia,Echinodermata,Asteroidea,Forcipulatida,Asteriidae,Asterias,high,NA
+140276,Testudinalia testudinalis,"(O. F. Müller, 1776)",Animalia,Mollusca,Gastropoda,NA,Lottiidae,Tectura,high,NA
+2847,Acoela,NA,Animalia,Xenacoelomorpha,NA,Acoela,NA,NA,high,Not quantified after 2004 at least.
+143803,Acrosiphonia,"J.Agardh, 1846",Plantae,Chlorophyta,Ulvophyceae,Ulotrichales,Ulotrichaceae,Acrosiphonia,medium,NA
+143803,Acrosiphonia,"J.Agardh, 1847",Plantae,Chlorophyta,Ulvophyceae,Ulotrichales,Ulotrichaceae,Acrosiphonia,medium,NA
+144422,Ahnfeltia plicata,"(Hudson) E.M.Fries, 1833",Plantae,Rhodophyta,Florideophyceae,Ahnfeltiales,Ahnfeltiaceae,Ahnfeltia,high,NA
+144422,Ahnfeltia plicata,"(Hudson) E.M.Fries, 1834",Plantae,Rhodophyta,Florideophyceae,Ahnfeltiales,Ahnfeltiaceae,Ahnfeltia,high,NA
+144422,Ahnfeltia plicata,"(Hudson) E.M.Fries, 1835",Plantae,Rhodophyta,Florideophyceae,Ahnfeltiales,Ahnfeltiaceae,Ahnfeltia,high,NA
+144422,Ahnfeltia plicata,"(Hudson) E.M.Fries, 1836",Plantae,Rhodophyta,Florideophyceae,Ahnfeltiales,Ahnfeltiaceae,Ahnfeltia,high,NA
+145716,Alaria esculenta (canopy),"(Linnaeus) Greville, 1828",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (primary),"(Linnaeus) Greville, 1829",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (primary),"(Linnaeus) Greville, 1830",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (canopy),"(Linnaeus) Greville, 1831",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (primary),"(Linnaeus) Greville, 1832",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (canopy),"(Linnaeus) Greville, 1833",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+145716,Alaria esculenta (primary),"(Linnaeus) Greville, 1834",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Alariaceae,Alaria,high,NA
+110993,Alcyonidium,"J.V.F.Lamouroux, 1813",Animalia,Bryozoa,Gymnolaemata,Ctenostomatida,Alcyonidiidae,Alcyonidium,low,NA
+110993,Alcyonidium,"J.V.F.Lamouroux, 1814",Animalia,Bryozoa,Gymnolaemata,Ctenostomatida,Alcyonidiidae,Alcyonidium,low,NA
+NA,Algal parasite on Mastocarpus,NA,NA,NA,NA,NA,NA,NA,NA,NA
+1135,Amphipoda,"Latreille, 1816",Animalia,Arthropoda,Malacostraca,Amphipoda,NA,NA,high,NA
+1135,Amphipoda,"Latreille, 1817",Animalia,Arthropoda,Malacostraca,Amphipoda,NA,NA,high,NA
+NA,Annelid,NA,NA,NA,NA,NA,NA,NA,NA,NA
+156737,Anomia simplex,"d'Orbigny, 1853",Animalia,Mollusca,Bivalvia,Pectinida,Anomiidae,Anomia,medium,NA
+162322,Pterothamnion plumula,"(J.Ellis) Nägeli, 1854",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Ceramiaceae,Antithamnion,medium,NA
+162322,Pterothamnion plumula,"(J.Ellis) Nägeli, 1855",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Ceramiaceae,Antithamnion,medium,NA
+118139,Anurida maritima,"(Guérin-Méneville, 1836)",Animalia,Arthropoda,Collembola,NA,Neanuridae,Anurida,high,NA
+103471,Aplidium,"Savigny, 1816",Animalia,Chordata,Ascidiacea,Aplousobranchia,Polyclinidae,Aplidium,low,NA
+103471,Aplidium,"Savigny, 1817",Animalia,Chordata,Ascidiacea,Aplousobranchia,Polyclinidae,Aplidium,low,NA
+147737,Arthopyrenia,"A. Massalongo, 1852",Fungi,Ascomycota,Dothideomycetes,Pleosporales,Arthopyreniaceae,Arthopyrenia,low,could be confused with cyanobacterial mats and other lichens - likely high intertidal black lichen
+145541,Ascophyllum nodosum (canopy),"(Linnaeus) Le Jolis, 1860",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+145541,Ascophyllum nodosum (canopy),"(Linnaeus) Le Jolis, 1861",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+145541,Ascophyllum nodosum (primary),"(Linnaeus) Le Jolis, 1862",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+145541,Ascophyllum nodosum,"(Linnaeus) Le Jolis, 1863",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+145541,Ascophyllum nodosum (canopy),"(Linnaeus) Le Jolis, 1864",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+145541,Ascophyllum nodosum (primary),"(Linnaeus) Le Jolis, 1865",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Ascophyllum,high,NA
+160102,Astyris lunata,"(Say, 1826)",Animalia,Mollusca,Gastropoda,Neogastropoda,Columbellidae,Astyris,high,NA
+143800,Audouinella,"Bory de Saint-Vincent, 1823",Plantae,Rhodophyta,Florideophyceae,NA,Acrochaetiaceae,Audouinella,low,NA
+144423,Bangia atropurpurea,"(Mertens ex Roth) C.Agardh, 1824",Plantae,Rhodophyta,Bangiophyceae,Bangiales,Bangiaceae,Bangia,low,NA
+NA,Bare Rock,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,Black Zone Spp,NA,NA,NA,NA,NA,NA,NA,NA,NA
+144442,Bonnemaisonia hamifera,"Hariot, 1890",Plantae,Rhodophyta,Florideophyceae,Bonnemaisoniales,Bonnemaisoniaceae,Bonnemaisonia,medium,NA
+144442,Bonnemaisonia hamifera,"Hariot, 1891",Plantae,Rhodophyta,Florideophyceae,Bonnemaisoniales,Bonnemaisoniaceae,Bonnemaisonia,medium,NA
+144442,Bonnemaisonia hamifera (Trailiella phase),"Hariot, 1892",Plantae,Rhodophyta,Florideophyceae,Bonnemaisoniales,Bonnemaisoniaceae,Bonnemaisonia,medium,NA
+148715,Botrylloides violaceus,"Oka, 1927",Animalia,Chordata,Ascidiacea,Stolidobranchia,Styelidae,Botrylloides,medium,NA
+157862,Botrylloides aureum,"Sars, 1851",Animalia,Chordata,Ascidiacea,Stolidobranchia,Styelidae,Botrylloides,low,NA
+103862,Botryllus schlosseri,"(Pallas, 1766)",Animalia,Chordata,Ascidiacea,Stolidobranchia,Styelidae,Botryllus,medium,NA
+111023,Amathia,"Lamouroux, 1812",Animalia,Bryozoa,Gymnolaemata,Ctenostomatida,Vesiculariidae,Bowerbankia,medium,NA
+NA,spp_to_remove,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,Brown Lichen,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,Unknown Bryozoan,NA,Animalia,Bryozoa,NA,NA,NA,NA,medium,NA
+111158,Bugula neritina,"(Linnaeus, 1758)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Bugulidae,Bugula,medium,NA
+158056,Cancer borealis,"Stimpson, 1859",Animalia,Arthropoda,Malacostraca,Decapoda,Cancridae,Cancer,high,NA
+158057,Cancer irroratus,"Say, 1817",Animalia,Arthropoda,Malacostraca,Decapoda,Cancridae,Cancer,high,NA
+144047,Callophyllis,"Kützing, 1843",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Kallymeniaceae,Callophyllis,low,NA
+110851,Callopora,"Gray, 1848",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Calloporidae,Callopora,low,NA
+NA,Campanularidae,NA,Animalia,Cnidaria,Hydrozoa,NA,Campanularidae,NA,medium,NA
+106876,Cancer,"Linnaeus, 1758",Animalia,Arthropoda,Malacostraca,Decapoda,Cancridae,Cancer,high,NA
+107381,Carcinus maenas,"Linnaeus, 1758",Animalia,Arthropoda,Malacostraca,Decapoda,Carcinidae,Carcinus,maenas,NA
+178915,Ceramium virgatum,"Roth, 1797",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Ceramiaceae,Ceramium,medium,NA
+178915,Ceramium virgatum (primary),"Roth, 1797",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Ceramiaceae,Ceramium,medium,NA
+178915,Ceramium virgatum (canopy),"Roth, 1797",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Ceramiaceae,Ceramium,medium,NA
+100782,Cerianthus,"Delle Chiaje, 1841",Animalia,Cnidaria,Anthozoa,Spirularia,Cerianthidae,Cerianthus,low,NA
+143995,Chaetomorpha,"Kützing, 1845",Plantae,Chlorophyta,Ulvophyceae,Cladophorales,Cladophoraceae,Chaetomorpha,high,NA
+145625,Chondrus crispus (primary),"Stackhouse, 1797",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Gigartinaceae,Chondrus,high,NA
+145625,Chondrus crispus (canopy),"Stackhouse, 1797",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Gigartinaceae,Chondrus,high,NA
+145722,Chorda filum,"(Linnaeus) Stackhouse, 1797",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Chordaceae,Chorda,medium,NA
+144910,Chordaria flagelliformis,"(O.F.Müller) C.Agardh, 1817",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Chordariaceae,Chordaria,medium,NA
+129243,Cirratulus,"Lamarck, 1818",Animalia,Annelida,Polychaeta,Terebellida,Cirratulidae,Cirratulus,NA,Not quantified after 2004 at least.
+145064,Cladophora rupestris,"(Linnaeus) Kützing, 1843",Plantae,Chlorophyta,Ulvophyceae,Cladophorales,Cladophoraceae,Cladophora,medium,NA
+145888,Cladostephus spongiosus,"(Hudson) C.Agardh, 1817",Chromista,Ochrophyta,Phaeophyceae,Sphacelariales,Cladostephaceae,Cladostephus,medium,NA
+145104,Clathromorphum circumscriptum,"(Strömfelt) Foslie, 1898",Plantae,Rhodophyta,Florideophyceae,Corallinales,Hapalidiaceae,Clathromorphum,high,NA
+145086,Codium fragile,"(Suringar) Hariot, 1889",Plantae,Chlorophyta,Ulvophyceae,Bryopsidales,Codiaceae,Codium,high,NA
+145086,Codium fragile (canopy),"(Suringar) Hariot, 1889",Plantae,Chlorophyta,Ulvophyceae,Bryopsidales,Codiaceae,Codium,high,NA
+145086,Codium fragile (primary),"(Suringar) Hariot, 1889",Plantae,Chlorophyta,Ulvophyceae,Bryopsidales,Codiaceae,Codium,high,NA
+145856,Colpomenia peregrina,"Sauvageau, 1927",Chromista,Ochrophyta,Phaeophyceae,Scytosiphonales,Scytosiphonaceae,Colpomenia,high,NA
+160215,Colus stimpsoni,"(Mörch, 1868)",Animalia,Mollusca,Gastropoda,Neogastropoda,Buccinidae,Colus,high,Likely a misidentification   Colus is a sandy bottom subtidal species (see SML checklist)
+1080,Copepoda,"Edwards, 1840",Animalia,Arthropoda,Copepoda,NA,NA,NA,high,NA
+145108,Corallina officinalis,"Linnaeus, 1758",Plantae,Rhodophyta,Florideophyceae,Corallinales,Corallinaceae,Corallina,high,NA
+NA,Coralline (crust),NA,NA,NA,NA,NA,NA,NA,NA,NA
+138018,Coryphella,"J. E. Gray, 1850",Animalia,Mollusca,Gastropoda,Nudibranchia,Coryphellidae,Coryphella,medium,NA
+138963,Crepidula fornicata,"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Calyptraeidae,Crepidula,high,NA
+110892,Cribrilina,"Gray, 1848",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Cribrilinidae,Cribrilina,low,NA
+111696,Crisia eburnea,"(Linnaeus, 1758)",Animalia,Bryozoa,Stenolaemata,Cyclostomatida,Crisiidae,Crisia,NA,NA
+834044,Crisularia turrita,"(Desor, 1848)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Bugulidae,Crisularia,low,NA
+111343,Cryptosula pallasiana,"(Moll, 1803)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Cryptosulidae,Cryptosula,high,NA
+151024,Culicoides,"Latreille, 1809",Animalia,Arthropoda,Insecta,Diptera,Ceratopogonidae,Culicoides,low,NA
+NA,Cyanobacteria,NA,NA,NA,NA,NA,NA,NA,NA,NA
+145615,Cystoclonium purpureum,"(Hudson) Batters, 1902",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Cystocloniaceae,Cystoclonium,medium,NA
+103531,Dendrodoa,"MacLeay, 1824",Animalia,Chordata,Ascidiacea,Stolidobranchia,Styelidae,Dendrodoa,medium,NA
+137885,Dendronotus,"Alder & Hancock, 1845",Animalia,Mollusca,Gastropoda,Nudibranchia,Dendronotidae,Dendronotus,medium,Not quantified after 2004 at least.
+145770,Devaleraea ramentacea,"(Linnaeus) Guiry, 1982",Plantae,Rhodophyta,Florideophyceae,Palmariales,Palmariaceae,Devaleraea,high,NA
+395099,Diadumene lineata,"(Verrill, 1869)",Animalia,Cnidaria,Anthozoa,Actiniaria,Diadumenidae,Diadumene,high,NA
+NA,Diatom,NA,NA,NA,NA,NA,NA,NA,NA,NA
+250126,Didemnum vexillum,"Kott, 2002",Animalia,Chordata,Ascidiacea,Aplousobranchia,Didemnidae,Didemnum,high,NA
+103457,Diplosoma,"Macdonald, 1859",Animalia,Chordata,Ascidiacea,Aplousobranchia,Didemnidae,Diplosoma,medium,NA
+145228,Dumontia contorta,"(S.G. Gmelin) Ruprecht, 1850",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Dumontiaceae,Dumontia,high,NA
+117888,Dynamena pumila,"(Linnaeus, 1758)",Animalia,Cnidaria,Hydrozoa,Leptothecata,Sertulariidae,Dynamena,medium,NA
+144099,Ectocarpus,"Lyngbye, 1819",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Ectocarpaceae,Ectocarpus,low,can be confused with Elachista
+117981,Ectopleura crocea,"(Agassiz, 1862)",Animalia,Cnidaria,Hydrozoa,Anthoathecata,Tubulariidae,Ectopleura,medium,NA
+144937,Elachista fucicola,"(Velley) Areschoug, 1842",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Chordariaceae,Elachista,high,lives on Fucus and Ascophyllum
+111355,Electra pilosa,"(Linnaeus, 1767)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Electridae,Electra,medium,NA
+234471,Ulva intestinalis,"Linnaeus, 1753",Plantae,Chlorophyta,Ulvophyceae,Ulvales,Ulvaceae,Ulva,high,NA
+145490,Erythrotrichia carnea,"(Dillwyn) J.Agardh, 1883",Plantae,Rhodophyta,Compsopogonophyceae,Erythropeltidales,Erythrotrichiaceae,Erythrotrichia,low,NA
+157976,Euplana,"Girard, 1893",Animalia,Platyhelminthes,Rhabditophora,Polycladida,Euplanidae,Euplana,low,Not quantified after 2004 at least.
+373772,Euthora cristata,"(C.Agardh) J.Agardh, 1846",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Kallymeniaceae,Euthora,low,NA
+373772,Euthora cristata,"(C.Agardh) J.Agardh, 1847",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Kallymeniaceae,Euthora,low,NA
+144129,Fucus (primary),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145548,Fucus vesiculosus (primary),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145544,Fucus distichus (primary),"Linnaeus, 1767",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+129529,Fabricia,"Blainville, 1828",Animalia,Annelida,Polychaeta,Sabellida,Fabriciidae,Fabricia,low,Not quantified after 2004 at least.
+793,Platyhelminthes,"Minot, 1876",Animalia,Platyhelminthes,NA,NA,NA,NA,high,Not quantified after 2004 at least.
+111621,Flustrellidra hispida,"(O. Fabricius, 1780)",Animalia,Bryozoa,Gymnolaemata,Ctenostomatida,Flustrellidridae,Flustrellidra,high,NA
+142515,Foviella,"Bock, 1925",Animalia,Platyhelminthes,Rhabditophora,Tricladida,Uteriporidae,Foviella,low,Not quantified after 2004 at least.
+144129,Fucus,"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+144129,Fucus (canopy),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145544,Fucus distichus (canopy),"Linnaeus, 1767",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145547,Fucus spiralis (canopy),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145548,Fucus vesiculosus (canopy),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145547,Fucus spiralis (primary),"Linnaeus, 1753",Chromista,Ochrophyta,Phaeophyceae,Fucales,Fucaceae,Fucus,high,NA
+145433,Hincksia granulosa,"(Smith) P.C.Silva, 1987",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Acinetosporaceae,Hincksia,low,NA
+147701,Verrucaria,"H.A.Schrader, 1794",Fungi,Ascomycota,Eurotiomycetes,Verrucariales,Verrucariaceae,Verrucaria,high,NA
+114779,Halacarus,"Gosse, 1855",Animalia,Arthropoda,Arachnida,Trombidiformes,Halacaridae,Halacarus,high,Not quantified after 2004 at least.
+131807,Halichondria,"Fleming, 1828",Animalia,Porifera,Demospongiae,Suberitida,Halichondriidae,Halichondria,low,NA
+158417,Hemigrapsus sanguineus,"(De Haan, 1835)",Animalia,Arthropoda,Malacostraca,Decapoda,Varunidae,Hemigrapsus,high,NA
+123974,Henricia sanguinolenta,"(O.F. Müller, 1776)",Animalia,Echinodermata,Asteroidea,Spinulosida,Echinasteridae,Henricia,high,NA
+140103,Hiatella arctica,"(Linnaeus, 1767)",Animalia,Mollusca,Bivalvia,Adapedonta,Hiatellidae,Hiatella,high,NA
+145712,Hildenbrandia rubra,"(Sommerfelt) Meneghini, 1841",Plantae,Rhodophyta,Florideophyceae,Hildenbrandiales,Hildenbrandiaceae,Hildenbrandia,high,NA
+153710,Celleporella hyalina,"(Linnaeus, 1767)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Hippothoidae,Hippothoa,low,NA
+119039,Idotea balthica,"(Pallas, 1772)",Animalia,Arthropoda,Malacostraca,Isopoda,Idoteidae,Idotea,high,NA
+325483,Idotea balthica,"(Pallas, 1772)",Animalia,Arthropoda,Malacostraca,Isopoda,Idoteidae,Idotea,high,NA
+140262,Littorina littorea,"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Littorina,high,NA
+140263,Littorina obtusata,"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Littorina,high,Not consistently quantified
+140264,Littorina saxatilis,"(Olivi, 1792)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Littorina,high,NA
+140170,Lacuna vincta,"(Montagu, 1803)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Lacuna,high,NA
+140170,Lacuna vincta (eggs),"(Montagu, 1803)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Lacuna,high,NA
+494940,Leathesia marina,"(Lyngbye) Decaisne, 1842",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Chordariaceae,Leathesia,high,NA
+129496,Lepidonotus,"Leach, 1816",Animalia,Annelida,Polychaeta,Phyllodocida,Polynoidae,Lepidonotus,low,not taught as least since 2004
+131715,Leucosolenia,"Bowerbank, 1864",Animalia,Porifera,Calcarea,Leucosolenida,Leucosoleniidae,Leucosolenia,medium,NA
+144016,Lithophyllum,"Philippi, 1837",Plantae,Rhodophyta,Florideophyceae,Corallinales,Corallinaceae,Lithophyllum,low,this is typically a subtidal genus
+145202,Phymatolithon lenormandii,(Areschoug) W.H. Adey,Plantae,Rhodophyta,Florideophyceae,Corallinales,Lithothamniaceae,Phymatolithon,high,NA
+NA,Little Round Green Things,NA,NA,NA,NA,NA,NA,NA,NA,NA
+140263,Littorina obtusata (eggs),"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Littorinidae,Littorina,high,Not consistently quantified
+324858,Namanereis,"Chamberlin, 1919",Animalia,Annelida,Polychaeta,Phyllodocida,Nereididae,Lycastopsis,low,not taught as least since 2004
+145650,Mastocarpus stellatus (canopy),"(Stackhouse) Guiry, 1984",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Phyllophoraceae,Mastocarpus,high,NA
+145650,Mastocarpus stellatus (primary),"(Stackhouse) Guiry, 1984",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Phyllophoraceae,Mastocarpus,high,NA
+145650,Mastocarpus stellatus (crust),"(Stackhouse) Guiry, 1984",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Phyllophoraceae,Mastocarpus,high,NA
+111411,Membranipora membranacea,"(Linnaeus, 1767)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Membraniporidae,Membranipora,high,NA
+100982,Metridium senile,"(Linnaeus, 1761)",Animalia,Cnidaria,Anthozoa,Actiniaria,Metridiidae,Metridium,high,NA
+111421,Microporella ciliata,"(Pallas, 1766)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Microporellidae,Microporella,low,NA
+155903,Micrura affinis,"(Stimpson, 1854)",Animalia,Nemertea,Anopla,NA,Lineidae,Micrura,low,Not quantified after 2004 at least.
+140467,Modiolus modiolus,"(Linnaeus, 1758)",Animalia,Mollusca,Bivalvia,Mytilida,Mytilidae,Modiolus,high,NA
+103509,Molgula,"Forbes, 1848",Animalia,Chordata,Ascidiacea,Stolidobranchia,Molgulidae,Molgula,low,a solitary ascidian
+144290,Monostroma,"Thuret, 1854",Plantae,Chlorophyta,Ulvophyceae,Ulotrichales,Gomontiaceae,Monostroma,low,NA
+140480,Mytilus edulis,"Linnaeus, 1758",Animalia,Mollusca,Bivalvia,Mytilida,Mytilidae,Mytilus,high,NA
+140430,Mya arenaria,"Linnaeus, 1758",Animalia,Mollusca,Bivalvia,Myida,Myidae,Mya,high,This is a soft sediment clam
+145765,Nemalion elmnithoides,(Velley) Batters 1902,Plantae,Rhodophyta,Florideophyceae,Nemaliales,Nemaliaceae,Nemalion,high,NA
+NA,Nematoda,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,Nemertea,NA,NA,NA,NA,NA,NA,NA,NA,NA
+129703,Nicolea,"Malmgren, 1866",Animalia,Annelida,Polychaeta,Terebellida,Terebellidae,Nicolea,low,Not quantified after 2004 at least.
+142231,Notoplana,"Laidlaw, 1903",Animalia,Platyhelminthes,Rhabditophora,Polycladida,Notoplanidae,Notoplana,low,Not quantified after 2004 at least.
+140403,Nucella lapillus,"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Neogastropoda,Muricidae,Nucella,high,NA
+140403,Nucella lapillus (eggs),"(Linnaeus, 1758)",Animalia,Mollusca,Gastropoda,Neogastropoda,Muricidae,Nucella,high,NA
+1762,Nudibranchia,"Cuvier, 1817",Animalia,Mollusca,Gastropoda,Nudibranchia,NA,NA,high,NA
+2036,Oligochaeta,"Grube, 1850",Animalia,Annelida,Clitellata,NA,NA,NA,high,NA
+138288,Onchidoris,"Blainville, 1816",Animalia,Mollusca,Gastropoda,Nudibranchia,Onchidorididae,Onchidoris,medium,NA
+123622,Ophiopholis,"Müller & Troschel, 1842",Animalia,Echinodermata,Ophiuroidea,Amphilepidida,Ophiopholidae,Ophiopholis,high,NA
+140658,Ostrea edulis,"Linnaeus, 1758",Animalia,Mollusca,Bivalvia,Ostreida,Ostreidae,Ostrea,high,NA
+158400,Pagurus acadianus,"Benedict, 1901",Animalia,Arthropoda,Malacostraca,Decapoda,Paguridae,Pagurus,high,NA
+145771,Palmaria palmata,"(Linnaeus) Weber & Mohr, 1805",Plantae,Rhodophyta,Florideophyceae,Palmariales,Palmariaceae,Palmaria,high,NA
+162798,Chlorella,"M.Beijerinck, 1890",Plantae,Chlorophyta,Trebouxiophyceae,Oocystales,Oocystaceae,Palmellococcus,low,NA
+145863,Petalonia fascia,"(O.F.Müller) Kuntze, 1898",Chromista,Ochrophyta,Phaeophyceae,Scytosiphonales,Scytosiphonaceae,Petalonia,medium,NA
+145202,Phymatolithon lenormandii,"(Areschoug) W.H.Adey, 1966",Plantae,Rhodophyta,Florideophyceae,Corallinales,Hapalidiaceae,Phymatolithon,high,could be lumped under Coralline crusts
+145482,Pilayella littoralis,"Kjellman, 1872",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Pilayellaceae,Pilayella,medium,NA
+793,Platyhelminthes,"Minot, 1876",Animalia,Platyhelminthes,NA,NA,NA,NA,high,Not quantified after 2004 at least
+144603,Plumaria plumosa,"(Hudson) Kuntze, 1891",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Wrangeliaceae,Plumaria,medium,NA
+883,Polychaeta,"Grube, 1850",Animalia,Annelida,Polychaeta,NA,NA,NA,high,Not quantified after 2004 at least.
+145668,Polyides rotunda,"Hudson, 1828",Plantae,Rhodophyta,Florideophyceae,Gigartinales,Polyidaceae,Polyides,medium,NA
+143853,Polysiphonia (primary),"Greville, 1823",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Rhodomelaceae,Polysiphonia,medium,"some species in this genus moved to Vertebrata. entries under this heading potentially Vertebrata, but hard to tell."
+143853,Polysiphonia (canopy),"Greville, 1823",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Rhodomelaceae,Polysiphonia,medium,"some species in this genus moved to Vertebrata. entries under this heading potentially Vertebrata, but hard to tell."
+143808,Porphyra,"C.Agardh, 1824",Plantae,Rhodophyta,Bangiophyceae,Bangiales,Bangiaceae,Porphyra,high,NA
+145800,Prasiola stipitata,"Suhr ex Jessen, 1848",Plantae,Chlorophyta,Trebouxiophyceae,Prasiolales,Prasiolaceae,Prasiola,medium,NA
+119898,Praunus,"Leach, 1814",Animalia,Arthropoda,Malacostraca,Mysida,Mysidae,Praunus,high,Not quantified after 2004 at least.
+144986,Protectocarpus speciosus,"(Børgesen) Kornmann, 1955",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Chordariaceae,Protectocarpus,low,NA
+144687,Ptilota serrata,"Kützing, 1847",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Wrangeliaceae,Ptilota,low,NA
+157188,Pylaiella littoralis,"(Linnaeus) Kjellman, 1872",Chromista,Ochrophyta,Phaeophyceae,Ectocarpales,Acinetosporaceae,Pylaiella,medium,NA
+143985,Ralfsia,"Berkeley, 1843",Chromista,Ochrophyta,Phaeophyceae,Ralfsiales,Ralfsiaceae,Ralfsia,medium,NA
+NA,Red lichen,NA,NA,NA,NA,NA,NA,NA,NA,NA
+145076,Rhizoclonium tortuosum,"(Dillwyn) Kützing, 1845",Plantae,Chlorophyta,Ulvophyceae,Cladophorales,Cladophoraceae,Rhizoclonium,medium,NA
+901,Sabellida,"Levinsen, 1883",Animalia,Annelida,Polychaeta,Sabellida,NA,NA,NA,NA
+234483,Saccharina latissima (primary),"(Linnaeus) C.E.Lane, C.Mayes, Druehl & G.W.Saunders, 2006",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Laminariaceae,Saccharina,high,NA
+234483,Saccharina latissima (canopy),"(Linnaeus) C.E.Lane, C.Mayes, Druehl & G.W.Saunders, 2006",Chromista,Ochrophyta,Phaeophyceae,Laminariales,Laminariaceae,Saccharina,high,NA
+145734,Saccorhiza dermatodea,"(Bachelot de la Pylaie) J.Agardh, 1868",Chromista,Ochrophyta,Phaeophyceae,Tilopteridales,Phyllariaceae,Saccorhiza,low,NA
+106210,Semibalanus balanoides,"(Linnaeus, 1767)",Animalia,Arthropoda,Hexanauplia,Sessilia,Archaeobalanidae,Semibalanus,high,NA
+111538,Schizoporella unicornis,"(Johnston in Wood, 1844)",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Schizoporellidae,Schizoporella,medium,NA
+145869,Scytosiphon lomentaria,"(Lyngbye) Link, 1833",Chromista,Ochrophyta,Phaeophyceae,Scytosiphonales,Scytosiphonaceae,Scytosiphon,medium,NA
+106210,Semibalanus balanoides (dead),"(Linnaeus, 1767)",Animalia,Arthropoda,Hexanauplia,Sessilia,Archaeobalanidae,Semibalanus,high,NA
+117234,Sertularia,"Linnaeus, 1758",Animalia,Cnidaria,Hydrozoa,Leptothecata,Sertulariidae,Sertularia,low,NA
+NA,Shell hash,NA,NA,NA,NA,NA,NA,NA,NA,NA
+141539,Skeneopsis planorbis,"(O. Fabricius, 1780)",Animalia,Mollusca,Gastropoda,Littorinimorpha,Skeneopsidae,Skeneopsis,medium,Not quantified after 2004 at least.
+144702,Spermothamnion repens,"(Dillwyn) Rosenvinge, 1924",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Wrangeliaceae,Spermothamnion,low,NA
+144272,Sphacelaria,"Lyngbye, 1818",Chromista,Ochrophyta,Phaeophyceae,Sphacelariales,Sphacelariaceae,Sphacelaria,low,not ID to species in 2014 but other years ID'ed to S. cirrosa
+145892,Sphacelaria cirrosa,"(Roth) C.Agardh, 1824",Chromista,Ochrophyta,Phaeophyceae,Sphacelariales,Sphacelariaceae,Sphacelaria,low,NA
+129642,Spirorbis,"Daudin, 1800",Animalia,Annelida,Polychaeta,Sabellida,Serpulidae,Spirorbis,medium,Not quantified after 2004 at least.
+144413,Spongomorpha aeruginosa,"(Linnaeus) Hoek, 1963",Plantae,Chlorophyta,Ulvophyceae,Ulotrichales,Ulotrichaceae,Spongomorpha,medium,NA
+124321,Strongylocentrotus droebachiensis,"(O.F. Müller, 1776)",Animalia,Echinodermata,Echinoidea,Camarodonta,Strongylocentrotidae,Strongylocentrotus,high,NA
+131543,Thelepus cincinnatus,"(Fabricius, 1780)",Animalia,Annelida,Polychaeta,Terebellida,Terebellidae,Thelepus,low,Not quantified after 2004 at least.
+140152,Boreochiton ruber,"(Linnaeus, 1767)",Animalia,Mollusca,Polyplacophora,Chitonida,Tonicellidae,Tonicella,high,NA
+110868,Tricellaria,"Fleming, 1828",Animalia,Bryozoa,Gymnolaemata,Cheilostomatida,Candidae,Tricellaria,high,NA
+793,Platyhelminthes,"Minot, 1876",Animalia,Platyhelminthes,Turbellaria,NA,NA,NA,medium,NA
+145984,Ulva lactuca,"Linnaeus, 1753",Plantae,Chlorophyta,Ulvophyceae,Ulvales,Ulvaceae,Ulva,high,NA
+NA,Unknown Brown Filamentous Algae,NA,NA,NA,NA,NA,NA,NA,NA,NA
+NA,Unknown Green Crust,NA,NA,NA,NA,NA,NA,NA,NA,NA
+475211,Vertebrata lanosa,"(Linnaeus) T.A.Christensen, 1967",Plantae,Rhodophyta,Florideophyceae,Ceramiales,Rhodomelaceae,Vertebrata,high,NA

@@ -27,10 +27,12 @@ p_only <- readr::read_csv(
 # find richness in replicates
 p_only_rich <- p_only %>%
   group_by(year, transect, transect_label, replicate) %>%
-  # find richness
+  # find richness in each entire transect/replicate/year
   summarize(richness = n_distinct(organism),
             n_tidal_level = n_distinct(tidalheight, level),
             .groups = "drop")  %>%
+  # filter out replicates with 6 or fewer tidal heights sampled
+  # note that all transects should have 
   filter(n_tidal_level >= 6) %>%
   select(-n_tidal_level)
 p_only_rich %>% glimpse()
@@ -62,13 +64,18 @@ p_only_rich_rare %>%
   facet_wrap(~transect_label)
 
 
-
-
-
 # model -------------------------------------------------------------------
 richmod <- lm(data = p_only_rich_rare,
               "rich_rarefied ~ year + transect_label")
 summary(richmod)
+
+library(performance)
+p <- plot(performance::check_model(richmod, panel = T))
+p <- p & labs(subtitle= NULL)
+ggsave(p, 
+       filename = "outputs/richness_change/total_rich_assumptions.png",
+       width = 12,
+       height = 8)
 
 au <- broom::augment(richmod,
                      p_only_rich_rare,

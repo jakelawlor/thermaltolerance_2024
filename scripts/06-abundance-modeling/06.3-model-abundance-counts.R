@@ -271,14 +271,18 @@ count_trends <- int_count_coefs_full_plotdf2 %>%
   geom_hline(yintercept = 0)+
   geom_text(data = . %>% 
               group_by(organism) %>% arrange(desc(upper__)) %>% slice(1) %>%
-              mutate(perc_change = round((exp(slope)*100)-100),2),
-            aes(#label = round(slope,2),
-              label = paste0(perc_change,"%"),
+              # previous annotation for percent change, but makes more sense as raw coefficient
+              #mutate(perc_change = round((exp(slope)*100)-100),2),
+              mutate(annotate = round(slope, 2)),
+            aes(
+              #label = paste0(perc_change,"%"),
+              label = annotate, 
               x = 1+1981, y = max_y,
               hjust = -0.15, vjust = 1),
             size = 4.5,
             stat="unique") +
-   geom_point(data = counts_points,
+   geom_point(data = counts_points %>%
+                mutate(organism = factor(organism, levels = levels(int_count_coefs_full_plotdf2$organism))),
               aes(y = density_nonzero),
               size = .3, alpha = .3) +
   geom_line(linewidth = .2) +

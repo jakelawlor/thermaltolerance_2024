@@ -20,10 +20,10 @@ full_rich_plot <- (overall_rich +
                      theme(panel.border  = element_rect(linewidth = .4)) +
                      labs(title = "b) Richness across shore levels")) 
 
-full_rich_plot + ggview::canvas(width = 8, height = 4)
+full_rich_plot + ggview::canvas(width = 8*.95, height = 4*.95)
 
 ggsave(full_rich_plot, 
        filename = "outputs/richness_change/full_rich_plot.png",
-       width = 8,
-       height = 4)
+       width = 8*.95,
+       height = 4*.95)
 

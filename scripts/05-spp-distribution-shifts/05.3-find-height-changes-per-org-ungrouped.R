@@ -567,7 +567,7 @@ trends_p <- pa_hs %>%
                               theme = theme(legend.title.position = "top"))) +
   
   labs(x = NULL,
-       y = "Tidal Height (m)",
+       y = "Intertidal Height (m)",
        color = "Occurrence Parameter") +
   theme(strip.clip = "off",
         strip.text = element_text(face = "italic"),

@@ -298,7 +298,6 @@ readr::write_csv(
   
 )
 
-
 cover_pa %>% glimpse()
 counts_pa %>% glimpse()
 
@@ -566,7 +565,6 @@ cover_sep_filt %>%
   geom_smooth(method = "lm") +
   facet_wrap(~level) +
   labs(title = unique(cover_sep_filt$organism)[i]) 
-
 
 
 ## | save cover filtered -----------------------------------------------------

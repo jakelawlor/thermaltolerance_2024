@@ -296,7 +296,7 @@ p2 <- no_zero_augment %>%
         legend.key.height = unit(5,"pt"),
         legend.key.width = unit(30,"pt")) +
   labs(x = "Effort-Corrected Species Richness",
-       y = "Tidal Height (m)",
+       y = "Intertidal Height (m)",
        color = "Sample Year",
        title = "Richness Across Shore Levels") +
   guides(color = guide_colorbar(
@@ -351,7 +351,7 @@ p3 <- no_zero_augment %>%
         legend.key.height = unit(5,"pt"),
         legend.key.width = unit(30,"pt")) +
   labs(x = "Effort-Corrected Species Richness",
-       y = "Tidal Height (m)",
+       y = "Intertidal Height (m)",
        color = "Sample Year",
        title = "Richness Across Shore Levels") +
   guides(color = guide_colorbar(
@@ -660,7 +660,7 @@ p2_hs <- no_zero_augment_hs %>%
         legend.key.height = unit(5,"pt"),
         legend.key.width = unit(30,"pt")) +
   labs(x = "Effort-Corrected Species Richness",
-       y = "Tidal Height (m)",
+       y = "Intertidal Height (m)",
        color = "Sample Year",
        title = "Richness Across Shore Levels") +
   guides(color = guide_colorbar(

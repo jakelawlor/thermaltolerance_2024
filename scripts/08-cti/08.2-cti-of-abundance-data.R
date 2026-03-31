@@ -152,17 +152,17 @@ performance::compare_performance(df_merge_mod1,
                                  df_merge_mod3, rank = T)
 summary(df_merge_mod2)
 # 
-# library(performance)
-# perf <- plot(check_model(df_merge_mod2))
-# perf[[5]] <- perf[[5]] + coord_cartesian(xlim = c(.5, 2.5), expand = F)
-# library(patchwork)
-# perf <- perf & labs(subtitle = NULL)
-# 
-# perf + ggview::canvas(12,8)
-# ggsave(perf, 
-#        filename = "outputs/cti/total_cti_assumptions.png",
-#        width = 12,
-#        height = 8)
+library(performance)
+perf <- plot(check_model(df_merge_mod2))
+perf[[5]] <- perf[[5]] + coord_cartesian(xlim = c(.5, 2.5), expand = F)
+library(patchwork)
+perf <- perf & labs(subtitle = NULL)
+
+perf + ggview::canvas(12,8)
+ggsave(perf, 
+       filename = "outputs/cti/total_cti_assumptions.png",
+       width = 12,
+       height = 8)
 
 df_merge %>% filter(is.na(df))
 
@@ -435,9 +435,9 @@ cti_all <- ((cti_abund.max + labs(title  =expression("a) "*CTI[max]*" and Max Te
   
 cti_all + ggview::canvas(12,4)
 
-ggsave(cti_all,
-       filename = "outputs/cti/cti_trends_all_parameters.png",
-       width = 12, height = 4)
+#ggsave(cti_all,
+#       filename = "outputs/cti/cti_trends_all_parameters.png",
+#       width = 12, height = 4)
 
 
 
@@ -491,140 +491,5 @@ df_merge3_mod <- lm(data = df_merge3,
                     cti ~ year)
 
 summary(df_merge3_mod)
-
-
-
-
-# -------------------------------------------------------------------------
-# Scratch -----------------------------------------------------------------
-# -------------------------------------------------------------------------
-
-
-
-# second, raw cti with percent cover summed per year first
-df_sum2 <- df  %>%
-  # first, find sum percent cover by organism across tidal levels
-  group_by(year, organism) %>%
-  summarize(pc_total = sum(pc_num),
-            mean_monthly_mean = unique(mean_monthly_mean),
-            .groups = "drop") %>%
-  group_by(year) %>%
-  summarize(cti = weighted.mean(mean_monthly_mean, pc_total),
-            .groups = "drop")
-
-df_sum2 %>%
-  ggplot(aes(x = year, 
-             y = cti)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-df_mod2 <- lm(data = df_sum2,
-              cti ~ year)
-summary(df_mod2)
-
-# third, pc summarized per transect
-df_sum3 <- df %>%
-  # first, find sum percent cover by organism across tidal levels
-  group_by(year, organism, transect) %>%
-  summarize(pc_total = sum(pc_num),
-            mean_monthly_mean = unique(mean_monthly_mean),
-            .groups = "drop") %>%
-  group_by(year) %>%
-  summarize(cti = weighted.mean(mean_monthly_mean, pc_total))
-
-df_sum3 %>%
-  ggplot(aes(x = year, 
-             y = cti)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-df_mod3 <- lm(data = df_sum3,
-              cti ~ year)
-summary(df_mod3)
-
-# fourth, cti summarized per transect, then per number of transects in that year  
-df_sum3 <- df %>%
-  # first, find sum percent cover by organism across tidal levels
-  group_by(year, organism, transect) %>%
-  summarize(pc_total = sum(pc_num),
-            mean_monthly_mean = unique(mean_monthly_mean),
-            .groups = "drop") %>%
-  group_by(year, transect) %>%
-  summarize(cti_transect = weighted.mean(mean_monthly_mean, pc_total)) 
-
-
-df_sum3 %>%
-  ggplot(aes(x = year, 
-             y = cti_transect)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-df_mod4 <- lm(data = df_sum3,
-              cti_transect ~ year + as.character(transect))
-summary(df_mod4)
-
-broom::augment(df_mod4, 
-               df_sum3,
-               interval = "confidence") %>%
-  ggplot(aes(x = year,
-             y = .fitted,
-             ymin = .lower,
-             ymax = .upper, 
-             group = transect)) +
-  geom_ribbon(alpha = .1) +
-  geom_line() +
-  geom_point(aes(y = cti_transect))
-
-
-df_sum5 <- df %>%
-  filter(!pc_num == 0) %>%
-  # first, find sum percent cover by organism across tidal levels
-  group_by(year, organism, transect) %>%
-  summarize(pc_total = sum(pc_num),
-            mean_monthly_mean = unique(mean_monthly_mean),
-            .groups = "drop") %>%
-  group_by(year) %>%
-  mutate(n_transect = n_distinct(transect),
-         n_spp = n_distinct(organism)) %>%
-  mutate(pc_total_per_transect = pc_total/n_transect) %>%
-  group_by(year) %>%
-  summarize(cti = weighted.mean(mean_monthly_mean, pc_total_per_transect))
-
-df_sum5 %>%
-  ggplot(aes(x = year, 
-             y = cti)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-df_mod5 <- lm(data = df_sum5,
-              cti ~ year)
-summary(df_mod5)
-
-
-# sixth, regress with all transect points
-df_sum6 <- df %>%
-  # first, find sum percent cover by organism across tidal levels
-  group_by(year, organism, transect) %>%
-  summarize(pc_total = sum(pc_num),
-            mean_monthly_mean = unique(mean_monthly_mean),
-            .groups = "drop") %>%
-  group_by(year, transect) %>%
-  summarize(cti = weighted.mean(mean_monthly_mean, pc_total)) 
-
-df_sum6 %>% 
-  ggplot(aes(x = year, y= cti,
-             group = transect)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-library(lme4)
-df_mod6 <- lmer(data = df_sum6,
-                cti ~ year + (1|transect))
-summary(df_mod6)
-fitted(df_mod6) %>% plot()
 
 

@@ -7,9 +7,11 @@
 
 library(dplyr)
 library(ggplot2)
+#remotes::install_github("ropensci/taxize")
 library(taxize)
 library(worrms)
 library(robis)
+
 
 # load spp ----------------------------------------------------------------
 spp_pres <- readr::read_csv(
@@ -97,7 +99,8 @@ source(here::here("quick-scripts","setup_parallel.R"))
 obis_recs_raw <- furrr::future_map(
   .x = aphiaids,
   .f = ~ .x %>%
-    occurrence(taxonid = .) %>%
+    occurrence(taxonid = .,
+               enddate = as.Date("2023-12-31")) %>%
     as_tibble(),
   .progress = T
 )
@@ -174,7 +177,8 @@ obis_recs_filt3 <-
     .x = obis_recs_filt2,
     .f = ~.x %>%
       filter(depth0 < 10,
-             year2 > 1981)
+             year2 > 1981,
+             year2 <= 2023)
   )
 
 obis_recs_with_depth <- purrr::map(
@@ -331,6 +335,7 @@ saveRDS(
 obis_recs_joined <- readRDS( here::here("data-processed",
                                         "species-thermal-affinities",
                                         "obis_recs_matched_temp.rds"))
+
 sapply(obis_recs_joined, nrow) %>% unname() %>% sort()
 
 readr::write_csv(
@@ -340,3 +345,4 @@ readr::write_csv(
              "number_obis_recs_per_spp.csv")
 )
 
+rm(list = ls())

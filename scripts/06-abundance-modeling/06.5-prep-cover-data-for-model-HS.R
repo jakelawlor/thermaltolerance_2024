@@ -1,5 +1,6 @@
 # prep percent cover species for abundance modeling
 
+# HIGHLY SAMPLED ONLY
 
 library(dplyr)
 library(ggplot2)
@@ -17,6 +18,13 @@ cover %>% glimpse()
 cover %>% filter(is.na(pc_num)) %>% distinct(percent_cover)
 cover %>% distinct(organism)
 # note that we start with 65 organisms total
+
+# filter to highly sampled transects and quadrats -------------------------
+hs <- readr::read_csv("data-processed/appledore-survey-data/pa-with-therm/pa-with-therm-highly-sampled.csv")
+hs <- hs %>% distinct(transect, level, year)
+
+cover <- cover %>% inner_join(hs)
+rm(hs)
 
 # model abundance change --------------------------------------------------
 # first, find mean by replicate 
@@ -70,14 +78,14 @@ multiyear_spp <- cover3 %>%
   group_by(organism) %>%
   distinct(year) %>%
   count(name = "years_pres")
-cover3 %>% distinct(organism) # 65 organisms to start
+cover3 %>% distinct(organism) # 59 organisms to start
 
 cover4 <- cover3 %>%
   left_join(multiyear_spp) %>%
   filter(years_pres > 3)
 cover4 %>% distinct(organism)
 # by subsetting the data to only organisms in 3+ years of sampling, 
-# we cut down to 49 species
+# we cut down to 43 species
 rm(cover3)
 multiyear_spp %>%
   filter(years_pres <= 3)
@@ -96,6 +104,8 @@ rm(cover4)
 
 # some tidal levels are never sampled again past 2004 - remove those
 # technically, we'll remove levels that are sampled for < 20 years
+
+# NOTE: now that we're using highly sampled dataset, this step doesn't do anyhting
 levels_sampled <- 
   cover5 %>%
   group_by(level) %>%
@@ -120,7 +130,7 @@ range(cover7$percent_cover_beta)
 readr::write_csv(cover7,
                  here::here("data-processed",
                             "abundance-data",
-                            "cover-data-prepped-for-model.csv"))
+                            "cover-data-prepped-for-model-HS.csv"))
 
 
 

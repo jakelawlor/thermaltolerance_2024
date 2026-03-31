@@ -23,7 +23,7 @@ pa_hs <- pa_therm_filtered%>%
   mutate(G = paste0(stringr::str_sub(Genus,1,1),".")) %>%
   mutate(organism = paste(G, Species)) %>%
   select(-G, -Genus, -Species) %>%
-  mutate(tidalheight = (13-level)*.348)  
+  mutate(tidalheight = (13.5-level)*.3048)  
 rm(pa_therm_filtered)
 
 # find for only counts dataset
@@ -325,6 +325,8 @@ p1_count <- mods_all_annotate_count %>%
   scale_x_continuous(breaks = c(0, .25, .5, .75, 1),
                      labels = scales::percent_format())
 
+p1_count
+
 
 p1_cover <- mods_all_annotate_cover %>%
   # filter(exclude == F) %>% 
@@ -525,3 +527,5 @@ names(out) <- c("all_count","all_cover","in_domain_count","in_domain_cover")
 saveRDS(out,
         file = "outputs/depth_shifts/depth_proportions_by_group.rds")
 
+
+rm(list = ls())

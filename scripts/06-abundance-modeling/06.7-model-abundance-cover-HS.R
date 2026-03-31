@@ -1,6 +1,6 @@
 # Find abundance change based for cover data
 
-
+# HIGHLY SAMPLED ONLY
 
 # libraries ---------------------------------------------------------------
 library(dplyr)
@@ -18,7 +18,7 @@ library(marginaleffects)
 data <- readr::read_csv(
   here::here("data-processed",
              "abundance-data",
-             "cover-data-prepped-for-model.csv")
+             "cover-data-prepped-for-model-HS.csv")
 ) %>% mutate(tidalheight = as.character(tidalheight))
 data %>% glimpse()
 
@@ -46,34 +46,28 @@ source(here::here(
 
 # 6. Apply functions to full dataset -------------------------------------
 
-
-# map a column to add a separate regression model to each species
-int_cover_models <- data %>%
-  filter(organism %in% c("Bonnemaisonia hamifera")) %>%
+# add priors and models in a for loop instead
+data_nested <- data %>%
   group_by(organism) %>%
-  nest() %>%
-  
-  mutate(intercept_prior = map(.x = data, .f=make_prior)) %>%
-  
-  mutate(
-    # mutate a column with full model details
-    model = map2(.x = data, 
-                 .y = intercept_prior,
-                 ~ find_regression_slopes(df = .x,
-                                          prior = .y),
-                 .progress = T)
-  )
-# NOTE: this threw warnings for 3 species with 
-# divergent transitions when we used the random effect model, 
-# 1. Bonnemaisonia hamifera
-# 2. Colpomenia peregrina
-# 3. Palmaria palmata
-# but that was not the case using this fixed effect model, 
-# so we'll skip this step. 
+  nest()
+
+data_nested$intercept_prior <- NA
+
+data_nested$intercept_prior <- purrr::map(.x = data_nested$data,
+                                          .f = ~make_prior(.x))
+
+data_nested$model <- NA
+
+data_nested$model <- purrr::map2(.x = data_nested$data,
+                                 .y = data_nested$intercept_prior,
+                                 .f = ~find_regression_slopes(df = .x,
+                                                              prior = .y),
+                                 .progress = T)
+
 
 
 # extract coefficients
-int_cover_coeffs <- int_cover_models %>%
+int_cover_coeffs <- data_nested %>%
   
   mutate(
     
@@ -92,51 +86,7 @@ int_cover_coeffs <- int_cover_models %>%
   ungroup() %>%
   mutate(organism = forcats::fct_reorder(organism, slope))
 
-
-#
-#redo_test <- data %>%
-#  filter(organism %in% c("Bonnemaisonia hamifera",
-#                         "Colpomenia peregrina",
-#                         "Palmaria palmata")) %>%
-#  group_by(organism) %>%
-#  nest() %>%
-#  mutate(intercept_prior = map(.x = data, .f=make_prior)) %>%
-#  
-#  mutate(
-#    # mutate a column with full model details
-#    model = map2(.x = data, 
-#                 .y = intercept_prior,
-#                 ~ find_regression_slopes_nolevel(df = .x,
-#                                                  prior = .y),
-#                 .progress = T)
-#  )
-#
-## extract coefficients
-#redo_coeffs <- redo_test %>%
-#  
-#  mutate(
-#    
-#    # extract coef and intercept
-#    slope = map_dbl(model,extract_slope),
-#    slope_se = map_dbl(model,extract_slope_se),
-#    slope_q2.5 = map_dbl(model,extract_slope_q2.5),
-#    slope_q97.5 = map_dbl(model,extract_slope_q97.5),
-#    #intercept = map_dbl(model,extract_intercept),
-#    margeffs = map(model, extract_marginal_effects),
-#    pred = map(model, predict_model_nolevel)
-#    
-#  ) %>%
-#  unnest(margeffs) %>%
-#  arrange(slope)  %>%
-#  ungroup() %>%
-#  mutate(organism = forcats::fct_reorder(organism, slope))
-#
-# merge these redos into the original coefficients dataset
-all_coeffs <- int_cover_coeffs #%>%
-  #filter(!organism %in% c("Bonnemaisonia hamifera",
-  #                        "Colpomenia peregrina",
-  #                        "Palmaria palmata")) %>%
-  #rbind(redo_coeffs)
+all_coeffs <- int_cover_coeffs 
 rm(int_cover_coeffs, redo_coeffs)
 
 
@@ -185,7 +135,7 @@ cover_trends <- int_cover_coefs_plotdf2 %>%
   ggplot(aes(y = estimate__, 
              x = year_zero+1981,
              group = tidalheight
-             )) +
+  )) +
   geom_ribbon(aes(ymin=lower__,
                   ymax=upper__),
               fill = "cyan3",
@@ -227,10 +177,10 @@ cover_trends <- int_cover_coefs_plotdf2 %>%
   scale_y_continuous(labels = scales::percent_format()) +
   guides(fill=guide_legend(title.position="top", 
                            title.hjust =0)) +
- # scale_fill_manual(values = list("High Intertidal" = "#6ce1e6",
- #                                 "Mid Intertidal" = "#3499ad",
- #                                 "Low Intertidal" = "#156594",
- #                                 "Single Level" = "grey80")) +
+  # scale_fill_manual(values = list("High Intertidal" = "#6ce1e6",
+  #                                 "Mid Intertidal" = "#3499ad",
+  #                                 "Low Intertidal" = "#156594",
+  #                                 "Single Level" = "grey80")) +
   labs(y=NULL,
        x=NULL,
        fill = "Tidal Height",
@@ -244,7 +194,7 @@ cover_trends <- int_cover_coefs_plotdf2 %>%
 
 cover_trends + ggview::canvas( width = 13.5, height = 14)
 ggsave(cover_trends,
-       filename = "outputs/abundance-change/all_trends_cover.png",
+       filename = "outputs/abundance-change/all_trends_cover_HS.png",
        width = 13.5,
        height = 14,
        dpi = 300)
@@ -264,20 +214,171 @@ moddf <- all_coeffs %>%
   left_join(therm) 
 
 moddf %>% glimpse()
+
+# remove the actual model from the tibble because it's very heavy
+moddf <- moddf %>% select(-model)
+
 # save
 saveRDS(moddf,
         here::here("data-processed",
                    "abundance-data",
-                   "abundance_change_slopes_cover_cattidalheight.rds"))
+                   "abundance_change_slopes_cover_cattidalheight_HS.rds"))
 
+rm(list = ls())
+
+
+# upload and plot ---------------------------------------------------------
 moddf <- readRDS(
   here::here("data-processed",
              "abundance-data",
-             "abundance_change_slopes_cover_cattidalheight.rds")
+             "abundance_change_slopes_cover_cattidalheight_HS.rds")
 )
+moddf %>% glimpse()
+
+
+
+# plot all for species ---------------------------------------------------------
+moddf %>% glimpse()
+
+int_cover_coefs_full_plotdf <- moddf %>% 
+  # put organisms in order by slope
+  mutate(organism = forcats::fct_reorder(organism, slope)) %>%
+  select(organism, slope, pred) %>%
+  # unnest the predictions value
+  unnest(pred) 
+
+cover_points <- moddf %>% 
+  select(organism, data) %>%
+  unnest(data) %>%
+  mutate(organism = factor(organism, 
+                           levels = levels(int_cover_coefs_full_plotdf$organism)))
+
+# add in coordinate for the max point of each species
+int_cover_coefs_full_plotdf2 <- int_cover_coefs_full_plotdf %>% 
+  left_join(cover_points %>% 
+              group_by(organism)%>% 
+              summarize(max_y = max(percent_cover_beta)) %>%
+              ungroup()) %>%
+  group_by(organism) %>%
+  mutate(max_y = pmax(max_y, max(upper__))) %>% ungroup() %>%
+  mutate(organism = factor(organism, 
+                           levels = levels(int_cover_coefs_full_plotdf$organism)))
+
+# make the max y coordinate whichever is bigger of the
+# max point, or the max upper bound
+
+cover_trends <- int_cover_coefs_full_plotdf2 %>%
+  ggplot(aes(y = estimate__, x = year_zero+1981,
+             group = tidalheight)) +
+  geom_ribbon(aes(ymin=lower__,
+                  ymax=upper__,
+                  #fill = height_char
+  ),
+  fill = "cyan3",
+  alpha=0.4) +
+  geom_hline(yintercept = 0)+
+  geom_text(data = . %>% 
+              group_by(organism) %>% arrange(desc(upper__)) %>% slice(1) %>%
+              mutate(annotate = round(slope, 3)),
+            aes(
+              label = annotate, 
+              x = 1+1981, y = max_y,
+              hjust = -0.15, vjust = 1),
+            size = 4,
+            stat="unique") +
+  geom_point(data = cover_points,
+             aes(y = percent_cover_beta),
+             size = .3, alpha = .3) +
+  geom_line(linewidth = .2) +
+  facet_wrap(~organism, 
+             scales = "free_y",
+             labeller = label_wrap_gen(width=20),
+             ncol = 6)  +
+  ggthemes::theme_few(base_size = 14) +
+  theme(strip.text.x = element_text(size=13,
+                                    face = "italic",
+                                    margin = margin(b=0,t=1),
+                                    lineheight=.85),
+        panel.border = element_rect(color = "transparent",fill = "transparent"),
+        panel.spacing.y = unit(10,"pt"),
+        panel.spacing.x = unit(20,"pt"),
+        plot.title = element_text(size=24),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.justification = c(.5,1),
+        legend.title = element_text(size=16),
+        legend.text = element_text(size=13),
+        legend.background  = element_rect(color = "black", size=.5),
+        strip.clip = "off"
+  ) +
+  guides(fill=guide_legend(title.position="top", 
+                           title.hjust =0)) +
+  labs(y=NULL,
+       x=NULL,
+       fill = "Tidal Height",
+       title = expression(paste("Percent Cover trends over time"))) +
+  theme(axis.text.x = element_text(angle= 45, 
+                                   hjust = 1, 
+                                   vjust = 1),
+        panel.spacing.x = unit(0.2,"lines"),
+        panel.spacing.y = unit(.2, "lines")) +
+  scale_y_continuous(labels = scales::percent_format()) 
+
+cover_trends + ggview::canvas( width = 13.5, height = 14)
+
+# save
+ggsave(cover_trends,
+       filename = "outputs/abundance-change/all_trends_cover_HS.png",
+       width = 13.5,
+       height = 14,
+       dpi = 300)
+
+
+
+
+
+# model slopes with therm -------------------------------------------------
+slopemod <- lm(data = moddf[1:21,],
+               formula = "slope ~ mean_monthly_mean")
+summary(slopemod)
+plot(slopemod)
+slopemod_au <- broom::augment(slopemod,
+                              moddf[1:21,],
+                              interval = "prediction")
+
+slopemod_au %>%
+  ggplot(aes(x = mean_monthly_mean,
+             y = slope)) +
+  geom_ribbon(aes(ymin = .lower,
+                  ymax = .upper),
+              fill = "cyan4",
+              alpha = .2) +
+  geom_line(aes(y = .fitted)) +
+  geom_point() +
+  # ggrepel::geom_text_repel(aes(label = organism)) +
+  geom_hline(yintercept = 0)
+
+
+rm(list = ls())
+gc()
+
+
+
+
+
+
+
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------------
+
 
 mod <- lm(data = moddf,
-               formula = "slope ~ mean_monthly_mean")
+          formula = "slope ~ mean_monthly_mean")
 summary(mod)
 # NOTE: 48 species in the regression because Clathromo doesn't have therm
 
@@ -387,4 +488,3 @@ moddf %>% filter(mean_monthly_mean < 10) %>% distinct(organism, slope, mean_mont
 
 
 
-  

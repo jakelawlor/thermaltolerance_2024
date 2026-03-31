@@ -16,6 +16,7 @@ pa <- readr::read_csv(
   )
 )
 pa %>% filter(pres == T) %>% distinct(organism) %>% nrow()
+pa %>% glimpse()
 # 93 species have presences to start with
 
 therm <- readr::read_csv(
@@ -26,12 +27,13 @@ therm <- readr::read_csv(
   )
 )
 therm %>% filter(!is.na(mean_monthly_mean)) %>% distinct(organism) %>% nrow()
+therm %>% glimpse()
 # 89 species total have therm
 
 pa_therm <- pa %>% left_join(therm) %>%
   filter(pres == T) %>%
   # translate level into tidal height
-  mutate(tidalheight = (13-level)*.348)  %>%
+  mutate(tidalheight = (13.5-level)*.3048)  %>%
   # filter out species that we don't have thermal affinity for
  # filter(is.na(mean_monthly_mean)) %>% # 5 organisms total get removed (4 don't have therm)
   mutate(transect_label = paste0("Transect ",transect)) %>%
@@ -76,16 +78,17 @@ pa_therm %>% distinct(transect_label, tidalheight, year) %>%
              y = tidalheight)) +
   geom_point() +
   facet_wrap(~transect_label) +
-  geom_hline(yintercept = -.25) +
-  geom_hline(yintercept = 3)
-# this leaves 9 tidalheights between these bounds (0-3). 
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 2.75)
+sort(unique(pa_therm$tidalheight))
+# this leaves 9 tidal heights between these bounds (0-2.75). 
 
 
 pa_therm %>% distinct(tidalheight) %>% 
-  count(tidalheight >= 0 & tidalheight < 3)
+  count(tidalheight >= 0 & tidalheight < 2.75)
 
 pa_therm_bound <- pa_therm %>%
-  filter(tidalheight >= 0 & tidalheight < 3)
+  filter(tidalheight >= 0 & tidalheight < 2.75)
 
 
 
@@ -98,8 +101,8 @@ pa_therm_bound %>%
              y = tidalheight)) +
   geom_point() +
   facet_wrap(~transect_label) +
-  geom_hline(yintercept = -.25) +
-  geom_hline(yintercept = 3)
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 2.75)
 
 transect_years_to_keep <- pa_therm_bound %>% 
   group_by(year, transect_label) %>% 
@@ -122,8 +125,8 @@ pa_therm %>% distinct(transect_label, tidalheight, year) %>%
              fill = "transparent",
              stroke = .2) +
   facet_wrap(~transect_label) +
-  geom_hline(yintercept = -.25) +
-  geom_hline(yintercept = 3) +
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 2.75) +
   geom_point(data = pa_therm_bound_yearskeep,
              color = "black",
              fill = "#aaeeffff",
@@ -165,8 +168,8 @@ pa_therm %>% distinct(transect_label, tidalheight, year) %>%
              fill = "transparent",
              stroke = .2) +
   facet_wrap(~transect_label, nrow = 3) +
-  geom_hline(yintercept = -.25) +
-  geom_hline(yintercept = 3) +
+  geom_hline(yintercept = 0) +
+  geom_hline(yintercept = 2.75) +
   geom_point(data = pa_therm_filtered,
              color = "black",
              fill = "#aaeeffff",
@@ -200,10 +203,10 @@ filtered_transect_p <- pa_therm %>% distinct(transect_label, tidalheight, year) 
              fill = "transparent",
              stroke = .1) +
   facet_wrap(~transect_label, nrow = 3) +
-  geom_hline(yintercept = -.25,
+  geom_hline(yintercept = 0,
              linetype = "dashed",
              linewidth = .25) +
-  geom_hline(yintercept = 3,
+  geom_hline(yintercept = 2.75,
              linetype = "dashed",
              linewidth = .25) +
   geom_point(data = pa_therm_filtered2,
@@ -220,8 +223,8 @@ filtered_transect_p <- pa_therm %>% distinct(transect_label, tidalheight, year) 
                                    hjust = 1, 
                                    vjust = 1),
         panel.spacing.y = unit(0,"mm"),
-        strip.text = element_text(margin = margin(t=7,0,b=2,0,"pt")),
-        plot.title = element_text(margin = margin(b=0)))
+        strip.text = element_text(margin = ggplot2::margin(t=7,0,b=2,0,"pt")),
+        plot.title = element_text(margin = ggplot2::margin(b=0)))
 
 filtered_transect_p + ggview::canvas(8,3.5)
 

@@ -8,6 +8,7 @@ library(dplyr)
 library(purrr)
 library(ggplot2)
 library(ggtext)
+library(patchwork)
 
 
 # upload data -------------------------------------------------------------
@@ -524,69 +525,6 @@ ggsave(p_therms_and_example,
 )
 
 
-# make another plot with density curve instead ----------------------------
-df <- obis_recs_joined %>%
-  bind_rows(.id = "organism") %>%
-  filter(!is.na(mean_monthly_sst))
-
-library(ggdist)
-df %>%
-  mutate(organism_fct = forcats::fct_reorder(organism, mean_monthly_sst)) %>%
-  ggplot(aes(x = organism_fct,
-             y = mean_monthly_sst)) +
-  geom_boxplot(outliers = F) +
-  geom_boxplot(aes(y = max_monthly_sst),
-               outliers = F) +
-  geom_boxplot(aes(y = min_monthly_sst),
-               outliers = F) +
-  theme(panel.grid.major.x = element_blank())
-
-df %>%
-  filter(organism %in% unique(df$organism)[1:10]) %>%
-  mutate(organism_fct = forcats::fct_reorder(organism, mean_monthly_sst)) %>%
-  ggplot(aes(y = organism_fct,
-             x = mean_monthly_sst)) +
-  ggridges::geom_density_ridges(color = "transparent") +
-  coord_flip()
-
-df %>% 
- # filter(organism %in% unique(df$organism)[1:10]) %>%
-  mutate(organism_fct = forcats::fct_reorder(organism, mean_monthly_sst,
-                                             .fun = mean),
-         ) %>%
-  group_by(organism_fct) %>%
-  summarize(mean_mean = mean(mean_monthly_sst),
-            mean_25 = quantile(mean_monthly_sst,.25),
-            mean_75 = quantile(mean_monthly_sst,.75),
-            max_mean = mean(max_monthly_sst),
-            max_25 = quantile(max_monthly_sst,.25),
-            max_75 = quantile(max_monthly_sst,.75),
-            min_mean = mean(min_monthly_sst),
-            min_25 = quantile(min_monthly_sst,.25),
-            min_75 = quantile(min_monthly_sst,.75)
-  ) %>%
-  ggplot(aes(x = organism_fct)) +
-  geom_pointrange(aes(y = mean_mean,
-                      ymin = mean_25,
-                      ymax = mean_75),
-                  size = .2) +
-  
-  geom_pointrange(aes(y = max_mean,
-                      ymin = max_25,
-                      ymax = max_75),
-                  size = .2,
-                  color = "tomato2",
-                  alpha = .5) +
-  geom_pointrange(aes(y = min_mean,
-                      ymin = min_25,
-                      ymax = min_75),
-                  size = .2,
-                  color = "cornflowerblue",
-                  alpha = .5) +
-  theme(panel.grid.major.x = element_blank()) +
-  ggview::canvas(height = 4, width = 8.5)
-
-
 
 readr::write_csv(
   obis_derived_affinities,
@@ -594,5 +532,6 @@ readr::write_csv(
              "species-thermal-affinities",
              "spp_thermal_affinities.csv")
 )
+
 
 rm(list  = ls())

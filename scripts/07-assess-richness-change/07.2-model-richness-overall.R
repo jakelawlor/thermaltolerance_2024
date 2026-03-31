@@ -17,7 +17,7 @@ p_only <- readr::read_csv(
              "pa-with-therm",
              "pa-with-therm-highly-sampled.csv")
 ) %>%
-  mutate(tidalheight = (13-level)*.348)  %>%
+  mutate(tidalheight = (13.5-level)*.3048)  %>%
   arrange(tidalheight) %>%
   mutate(transect_label = paste0("Transect ",transect)) %>%
   arrange(transect) %>%
@@ -72,6 +72,7 @@ summary(richmod)
 library(performance)
 p <- plot(performance::check_model(richmod, panel = T))
 p <- p & labs(subtitle= NULL)
+p + ggview::canvas(12,8)
 ggsave(p, 
        filename = "outputs/richness_change/total_rich_assumptions.png",
        width = 12,
@@ -188,96 +189,4 @@ total_rich_eff_with_segments2 <- total_rich_eff +
              aes(x = year, 
                  y = rich_rarefied),
              size = .7) 
-
-
-
-
-# scratch -----------------------------------------------------------------
-
-sjPlot::plot_model(richmod, type = "pred", terms = c("year"),
-                   color = "cyan4",
-                   alpha = .6) +
-  geom_line(data = au,
-            inherit.aes=F,
-            aes(x = year, y  = .fitted, group = transect_label),
-            alpha = .5) +
-  geom_segment(data = au,
-               inherit.aes = F,
-               aes(x = year,
-                   xend = year,
-                   y = .fitted,
-                   yend = rich_rarefied),
-               linetype = "longdash",
-               linewidth = .3,
-               alpha = .4) +
-  geom_point(data = au,
-             inherit.aes = F,
-             aes(x= year, 
-                 y = rich_rarefied),
-             size = .5,
-             alpha = .4)
-
-
-sjPlot::plot_model(richmod, type = "pred", terms = c("year","transect_label"),
-                   color = "cyan4",
-                   alpha = .6, show.legend = F) 
-geom_point(data = au,
-           inherit.aes = F,
-           aes(x= year, 
-               y = richness,
-               color = transect_label),
-           size = 1,
-           alpha = .8) +
-  scale_color_viridis_d() +
-  guides(fill = guide_none(),
-         color = guide_legend())
-
-
-
-
-# try with an interaction term
-richmod2 <- lm(data = rich_over_time,
-               "richness ~ year * transect_label")
-summary(richmod2)
-
-car::Anova(richmod2)
-
-au2 <- broom::augment(richmod2,
-                      rich_over_time,
-                      interval = "confidence")
-
-p_faceted2 <- au2 %>% 
-  ggplot(aes(x = year,
-             y = richness,
-             group = transect_label)) +
-  geom_point() +
-  # gghighlight::gghighlight(use_direct_label = F,
-  #                          unhighlighted_params = list(alpha = .2)) +
-  geom_ribbon(aes(ymin = .lower,
-                  ymax = .upper),
-              alpha = .4,
-              fill = "cyan4") +
-  geom_line(aes(y = .fitted)) +
-  facet_wrap(~transect_label, nrow = 2) +
-  labs(y = "Full-Transect Species Richness",
-       x = NULL) +
-  scale_x_continuous(breaks = c(1980, 2000, 2020)) +
-  theme(axis.text.x = element_text(angle = 45,
-                                   hjust = 1,
-                                   vjust = 1))
-
-p_faceted2 + ggview::canvas(4,4)
-
-performance::compare_performance(richmod, richmod2, rank=T)
-# now do it a different way -----------------------------------------------
-# find full island species richness
-set.seed(1)
-# here, let's find the richness on the full island, rarefying to the 
-# minimum number of transects sampled, or something like that
-
-
-
-
-
-
 

@@ -1,12 +1,16 @@
+# script to merge CTI plots
+
 library(ggplot2)
+library(patchwork)
+
+
+# upload plots ------------------------------------------------------------
 p1 <- readRDS("outputs/cti/cti_by_abundance_plot.rds") +
   labs(title = "Total CTI with abundance data")
 p2 <- readRDS("outputs/cti/p_by_level_by_abundance.rds") 
 
 
-library(patchwork)
-
-
+# merge  ------------------------------------------------------------------
 pfull <- (p1 | p2) + plot_layout(widths = c(1,1))
 pfull +
   ggview::canvas(8,5)

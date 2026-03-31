@@ -16,7 +16,7 @@ p_only <- readr::read_csv(
              "pa-with-therm",
              "pa-with-therm-all.csv")
 ) %>%
-  mutate(tidalheight = (13-level)*.348)  %>%
+  mutate(tidalheight = (13.5-level)*.3048)  %>%
   arrange(tidalheight) 
 
 
@@ -164,7 +164,7 @@ library(performance)
 perf <- plot(check_model(mod5))
 library(patchwork)
 perf <- perf & labs(subtitle = NULL)
-perf
+perf + ggview::canvas(12,8)
 
 # save 
 ggsave(perf, 
@@ -256,11 +256,11 @@ p1 <- no_zero_augment %>%
                                   margin = margin( b = 0, t = 2)))
 
 p1 + ggview::canvas(6,5)
-ggsave(p1, 
-       filename = "outputs/richness_change/p1_no_zeros.png",
-       width = 6,
-       height = 5,
-       unit = "in")
+#ggsave(p1, 
+#       filename = "outputs/richness_change/p1_no_zeros.png",
+#       width = 6,
+#       height = 5,
+#       unit = "in")
 
 
 
@@ -304,7 +304,7 @@ p2 <- no_zero_augment %>%
   ) +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
   coord_cartesian(xlim = c(-.1,10.5),
-                  ylim = c(-1,5),
+                  ylim = c(-.75,4.5),
                   expand = F,
                   clip = "off") +
   theme(panel.grid = element_blank())
@@ -361,11 +361,11 @@ p3 <- no_zero_augment %>%
   theme(panel.grid = element_blank())
 
 p3 + ggview::canvas(4,4)
-ggsave(p3, 
-       filename = "outputs/richness_change/p3_no_zeros.png",
-       width = 4,
-       height = 4,
-       unit = "in")
+#ggsave(p3, 
+#       filename = "outputs/richness_change/p3_no_zeros.png",
+#       width = 4,
+#       height = 4,
+#       unit = "in")
 # remove all stuff we don't need
 rm(mod1, mod2, mod3, mod5, predict_df)
 
@@ -383,7 +383,7 @@ p_only_hs <- readr::read_csv(
              "pa-with-therm",
              "pa-with-therm-highly-sampled.csv")
 ) %>%
-  mutate(tidalheight = (13-level)*.348)  %>%
+  mutate(tidalheight = (13.5-level)*.3048)  %>%
   arrange(tidalheight) 
 
 
@@ -620,11 +620,11 @@ p1_hs <- no_zero_augment_hs %>%
                                   margin = margin( b = 0, t = 2)))
 
 p1_hs + ggview::canvas(6,5)
-ggsave(p1, 
-       filename = "outputs/richness_change/p1_no_zeros_HS.png",
-       width = 6,
-       height = 5,
-       unit = "in")
+#ggsave(p1, 
+#       filename = "outputs/richness_change/p1_no_zeros_HS.png",
+#       width = 6,
+#       height = 5,
+#       unit = "in")
 
 
 
@@ -668,7 +668,7 @@ p2_hs <- no_zero_augment_hs %>%
   ) +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
   coord_cartesian(xlim = c(-.1,10.5),
-                  ylim = c(-1,5),
+                  ylim = c(-.75,4.5),
                   expand = F,
                   clip = "off") +
   theme(panel.grid = element_blank())
@@ -721,11 +721,11 @@ p3_hs <- no_zero_augment_hs %>%
   theme(panel.grid = element_blank())
 
 p3_hs + ggview::canvas(4,4)
-ggsave(p3_hs, 
-       filename = "outputs/richness_change/p3_no_zeros_HS.png",
-       width = 4,
-       height = 4,
-       unit = "in")
+#ggsave(p3_hs, 
+#       filename = "outputs/richness_change/p3_no_zeros_HS.png",
+#       width = 4,
+#       height = 4,
+#       unit = "in")
 # remove all stuff we don't need
 rm(mod1_hs, mod2_hs, mod3_hs, mod5_hs, predict_df_hs)
 
@@ -743,6 +743,8 @@ all_rich_p + ggview::canvas(8,4)
 
 ggsave(all_rich_p,
        file = "outputs/richness_change/rich_per_level_all_vs_hs.png",
-       width = 8*.8,
-       height = 4*.8,
+       width = 8,
+       height = 4,
        unit = "in")
+
+rm(list = ls())

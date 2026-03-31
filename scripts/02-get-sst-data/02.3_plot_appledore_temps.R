@@ -1,3 +1,8 @@
+
+library(dplyr)
+library(ggplot2)
+theme_set(theme_bw())
+
 # upload raw temperature values in the study area
 temp <- read.csv(here::here(
   "data-processed",
@@ -84,8 +89,9 @@ temp_p <- temp_pivot %>%
   geom_ribbon(data = au_pivot,
               aes(ymin = .lower,
                   ymax = .upper),
-              alpha = .1,
+              alpha  = .25,
               color = "transparent") +
+  scale_alpha_identity() +
   geom_line(data = au_pivot,
             aes(y = .fitted),
             linetype = "dashed") +
@@ -97,7 +103,7 @@ temp_p <- temp_pivot %>%
                  label = label),
             hjust = 0,
             #fill = "white",
-            alpha = .25,
+            alpha = .3,
             fontface = "bold",
             size = 3,
             lineheight = .88,
@@ -121,11 +127,13 @@ temp_p <- temp_pivot %>%
        ) +
   
   theme(legend.position = "inside",
-        legend.position.inside = c(.5, .02),
+        legend.position.inside = c(.5, .01),
         legend.justification = c(.5, 0),
         legend.direction = "horizontal",
         panel.grid = element_blank(),
-        legend.box.margin = margin(t = -5,b = -10,0,0,"pt")) +
+        legend.box.margin = margin(t = -5,b = -10,0,0,"pt"),
+        legend.background = element_blank(),
+        legend.text = element_text(size = 8)) +
   guides(fill = guide_legend(theme = theme(legend.title.position = "top")),
          color = guide_legend(theme = theme(legend.title.position = "top"))) 
 

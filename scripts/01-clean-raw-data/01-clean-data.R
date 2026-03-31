@@ -1,5 +1,5 @@
 
-# Script to change clean data
+# Script to clean raw data
 
 
 
@@ -7,7 +7,6 @@
 library(dplyr)
 library(ggplot2)
 library(stringr)
-
 
 
 # 2. load species list -------------------------------------------------------
@@ -46,25 +45,25 @@ counts <- readr::read_csv(
 ) %>%
   janitor::clean_names() 
 
+# find all tidal elevations
+(13.5-sort(unique(counts$level)))*0.3048
+
 ## | first, cut to real organisms --------------------------------------------
 counts %>% distinct(organism) %>%
   arrange(organism) %>% pull()
 
-
-
 counts2 <- counts %>%
   # cut out one-word organisms (Amphipoda, Cancer, etc)
   filter(str_detect(organism, " ")) %>%
-  # filter out "eggs"
+  # filter out "eggs" species
   filter(!str_detect(organism,"\\(eggs\\)")) %>%
   # filter out when year / transect / level are NA
   tidyr::drop_na(year, transect, level) %>%
   # filter to data_taken == yes, 
-  # this column is a bit weird but I think this is the best solution
   filter(data_taken == "yes") %>%
   # filter out replicates with "a" and "b",
   # and change "NA" replicates to replicate 1
-  # (these cases there was only one)
+  # (in these cases, there was only one replicate)
   mutate(replicate = case_when(is.na(replicate) ~ "1",
                                TRUE ~ replicate)) %>%
   filter(!str_detect(replicate,"a|b")) %>% # note this is only one instance
@@ -73,6 +72,12 @@ counts2 <- counts %>%
   filter(level %% 1 == 0)
 rm(counts)
 
+# view number of replicates per sampled quadrat
+counts2 %>%
+  group_by(year, transect, level) %>%
+  summarize(n= n_distinct(replicate)) %>%
+  ungroup() %>%
+  pull(n) %>% table()
 
 ## | deal with "count" column -------------------------------------------
 counts3 <- counts2 %>% 
@@ -93,10 +98,12 @@ counts3 <- counts2 %>%
 rm(counts2)
 
 # sometimes, one organism is listed twice in one year/transect/
-# level/organism. Usually, as count = 0 and count == 0.0,
-# but sometimes count = 0 and count = p, etc. 
+# level/organism. In all of these cases, at least one value is
+# either zero or NA, indicating that these duplicates are a product
+# of backfilling data to complete cases. 
 # in these cases, arrange by rev(pres) so TRUEs are on top, then 
-# slice only the first row
+# slice only the first row to keep the more quantitative value
+# (numbers will be selected over NAs and zeros, and "p" will be selected over 0)
 counts4 <- counts3 %>%
   group_by(year, transect, level, replicate, organism) %>%
   arrange(-pres) %>%
@@ -110,8 +117,20 @@ counts4 <- counts3 %>%
   filter(max_pres > 0 ) %>%
   select(-max_pres)
 
+# view the cases in which two values are present 
+# within one year/transect/level/replicate/organism just to make sure
+counts3 %>%
+  group_by(year, transect, level, replicate, organism) %>%
+  add_count() %>%
+  filter(n > 1) %>%
+  mutate(n_rec = 1:n()) %>%
+  ungroup() %>%
+  select(year, transect, level, replicate, organism, count, n_rec) %>%
+  tidyr::pivot_wider(names_from = n_rec,
+                     values_from = count) %>%
+  count( `1`, `2`) %>%
+  print(n = Inf)
 rm(counts3)
-
 
 
 ## | make a pres abs dataset -------------------------------------------------
@@ -230,7 +249,7 @@ cover3 %>% glimpse()
 # we changed Bonnemaisonia hamifera (Trailiella phase) to Bonnemaisonia hamifera,
 # so many appear repeated now. group them by year/level/transect/level/org
 # and take the top row, arranged by presence, so when they are present,
-# that will be the row kept. (most cases they are absent for both options)
+# that will be the row kept. (most cases they are absent for both cases)
 cover4 <- cover3 %>%
   group_by(year, transect, level, replicate, organism) %>%
   arrange(-pres) %>%
@@ -244,6 +263,18 @@ cover4 <- cover3 %>%
   ungroup() %>%
   filter(max_pres > 0 ) %>%
   select(-max_pres)
+
+cover3 %>%
+  group_by(year, transect, level, replicate, organism) %>%
+  add_count() %>%
+  filter(n > 1) %>%
+  mutate(n_rec = 1:n()) %>%
+  ungroup() %>%
+  select(year, transect, level, replicate, organism, percent_cover, n_rec) %>%
+  tidyr::pivot_wider(names_from = n_rec,
+                     values_from = percent_cover) %>%
+  count( `1`, `2`) %>%
+  print(n = Inf)
 
 # here we've filtered out 3 species that appear never
 # to be present: 1 Celleporella hyalina, 2 Spermothamnion repens, 3 Pilayella littoralis   
@@ -261,7 +292,7 @@ cover_pa <- cover4 %>%
 # 5. merge all P/A --------------------------------------------
 
 ## | find data taken quadrats --------------------------------------------
-# first, find sites where data was taken in both years
+# first, find sites where data was taken in both datasets
 # we will later use this to know when richness was not counted 
 # (e.g., data not taken), or when data was taken and richness was zero
 # and also to filter to only quadrats where both count and cover data
@@ -386,15 +417,7 @@ counts_sep <- counts4 %>%
   split(f = .$organism)
 
 rm(counts4)
-counts_sep[[7]] %>%
-  # first, add a dummy column to signify this was in the dataset
-  mutate(in_sample = "yes") %>%
-  
-  # join with the both_taken df using full_join to keep all rows
-  full_join(both_taken,
-            by = join_by(year, transect, level,
-                         replicate)) %>%
-  distinct(data_taken, both_taken) 
+
 
 ## | split and filter --------------------------------------------------------
 # here, we'll split by species, filter each one to only transects and
@@ -583,5 +606,39 @@ length(abundance_spp) # 92 species total across both datasets
 length(unique(p_only$organism)) # 93 species in p_only dataset 
 unique(p_only$organism)[!unique(p_only$organism)%in% abundance_spp]
 # "Crisia eburnea" is the one in the p/a dataset but not in the abundance
+
+
+# see how many transects and levels were retained per species
+counts_sep_filt %>%
+  group_by(organism) %>%
+  summarize(n_transect = n_distinct(transect),
+            n_level = n_distinct(level)) %>%
+  ungroup() %>%
+  summarize(mint = min(n_transect),
+            mediant = median(n_transect),
+            meant = mean(n_transect),
+            maxt = max(n_transect),
+            minl = min(n_level),
+            medianl = median(n_level),
+            meanl = mean(n_level),
+            maxl = max(n_level))
+
+cover_sep_filt %>%
+  group_by(organism) %>%
+  summarize(n_transect = n_distinct(transect),
+            n_level = n_distinct(level)) %>%
+  ungroup() %>%
+  summarize(min = min(n_transect),
+            median = median(n_transect),
+            mean = mean(n_transect),
+            max = max(n_transect),
+            minlevel = min(n_level),
+            medianlevel = median(n_level),
+            meanlevel = mean(n_level),
+            maxlevel = max(n_level))
+
+both_taken %>%
+  summarize(n_transect = n_distinct(transect),
+            n_level = n_distinct(level))
 
 rm(list = ls())

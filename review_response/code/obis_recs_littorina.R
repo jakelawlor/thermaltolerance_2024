@@ -138,8 +138,6 @@ contains_depth <- purrr::map(
 ) %>%
   unlist()
 contains_depth %>% table()
-# 2 species don't contain depth values, 
-# so we'll remove those for now
 
 
 obis_recs_filt <- purrr::map(
@@ -213,7 +211,6 @@ obis_recs_number %>%
   arrange(obis_recs_with_depth)
 
 rm(obis_recs_filt2, obis_recs_filt, obis_recs_raw)
-rm(aphiaids2)
 
 
 
@@ -224,6 +221,8 @@ length(obis_recs_matched)
 length(obis_recs_filt3)
 names(obis_recs_matched) <- names(obis_recs_filt3)
 
+# change lat and lon to have coordinates ending in .5 so that they can be 
+# matched to the year and coordinate of SST data. 
 for(i in 1:length(obis_recs_filt3)){
   
   df <- furrr::future_pmap(
@@ -233,17 +232,10 @@ for(i in 1:length(obis_recs_filt3)){
               lon = stringr::str_replace(obis_recs_filt3[[i]]$decimalLongitude,"\\.[0-9]*",".5")
     ),
     .f = function(year, depth, lat, lon) {
-      # yeardat <-  temp[[year]]
-      # yeardat[yeardat$longitude == stringr::str_replace(lon,
-      #                                                   "\\.[0-9]*",".5") &
-      #           yeardat$latitude == stringr::str_replace(lat,
-      #                                                    "\\.[0-9]*",".5") , ]
-      #
       temp[[year]][temp[[year]]$longitude == lon &
                      temp[[year]]$latitude == lat , ]
       
     },
-    # .id = "rowname",
     .progress = T
   ) %>%
     bind_rows(.id = "rownum")
@@ -291,11 +283,6 @@ obis_recs_filt4 <-
   )
 rm(obis_recs_filt3)
 
-obis_recs_joined[[1]] %>% 
-  mutate(longitude = purrr::map(.x = longitude, .f = ~unlist(.x)),
-         latitude = purrr::map(.x = latitude, .f = ~unlist(.x))) %>% 
-  slice(5000) %>%
-  glimpse()
 # now join both datasets 
 obis_recs_joined <-
   purrr::map(
@@ -309,8 +296,15 @@ obis_recs_joined[[1]] %>% head()
 
 
 obis_recs_joined[[1]] %>% 
-  filter(!is.na(min_monthly_sst)) %>%
+  mutate(longitude = purrr::map(.x = longitude, .f = ~unlist(.x)),
+         latitude = purrr::map(.x = latitude, .f = ~unlist(.x))) %>% 
+  slice(5000) %>%
   glimpse()
+
+obis_recs_joined[[1]]$longitude <- purrr::map(.x = obis_recs_joined[[1]]$longitude,
+                                              .f = ~unlist(.x))
+obis_recs_joined[[1]]$latitude <- purrr::map(.x = obis_recs_joined[[1]]$latitude,
+                                              .f = ~unlist(.x))
 
 
 p2_matched_records_map <- ggplot() +
@@ -402,6 +396,8 @@ ggsave(p_joined,
        filename = "review_response/figures/littorina_map.png",
        width = 12, height = 2.5)
 
+
+# calculate STIs using good and "bad" records -------------------------------
 mean(obis_recs_joined[[1]]$mean_monthly_sst, na.rm=T)
 mean(good_recs$mean_monthly_sst, na.rm=T)
 

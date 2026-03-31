@@ -223,7 +223,7 @@ df.species.table %>%
 ## Dataset 1: keep everything and average as explained on lines 279-282
 ## And filtered as explained on lines 282-285
 df5
-df.gamma1 <- df5 %>% # NOTE: here is the reviewer's mistake
+df.gamma1 <- df5 %>% # NOTE: here is the reviewer's mistake --------------
   mutate(Present = if_else(Count == 0,0,1)) %>%
   group_by(Year,Transect,Level) %>%
   summarise(quad_mean = mean(Count, na.rm = TRUE),
@@ -314,7 +314,7 @@ df.pc.2
 # steps that we describe differently than we did, or not at all, and also does not
 # conduct some steps which we completed but did not describe in our initial submission.
 # Here, we show here how how applying the steps that we described in the main text
-# of our initial submission (and properly filterint to the target species) achieve
+# of our initial submission (and properly filtering to the target species) achieve
 # a much closer result to that which we found and presented. 
 
 
@@ -352,7 +352,7 @@ data_jl %>%
 df5 <- df4 %>%
   mutate(Organism = if_else(Organism == "Tectura testinalis","Tectura testudinalis",Organism),
          Organism = if_else(Organism == "Idotea baltica","Idotea balthica",Organism))
-df5$tidalheight <- 0.3408*(13.5 - df5$Level)
+df5$tidalheight <- 0.3048*(13.5 - df5$Level)
 unique(df5$tidalheight)
 unique(df5$Organism)
 
@@ -403,161 +403,105 @@ extract_slope(tect_mod_jl)
 
 
 
-# now, do all the steps we did --------------------------------------------
-# complete extra steps which we didn't detain in the first submission
-# of our main text, including:
-# - fill in zeros for transects that were measured but species wasn't found
-# - filter out zeros from transects in which species was never present
-# - filter out levels above and below vertical limits
-# - those done above:
 
-# first find all samples taken
-all_taken <- df %>%
-  filter(Data_taken == "yes") %>%
-  distinct(Year, Transect, Level, Replicate)
-
-tect_full <- tect %>% 
-  full_join(all_taken) %>%
-  tidyr::replace_na(list(Organism = "Tectura testudinalis",
-                         Count = 0))
-
-tect_full$tidalheight <- 0.3408*(13.5 - tect_full$Level)
-
-tect_correct <- tect_full %>%
-  
-  #  filter to transects in which the species was seen 
-  # (a detail which we completed, but did not describe in the main text)
+# try reflecting all steps we took ----------------------------------------
+tect_all <- tect %>% 
+  # filter out transects in which the species was never seen
   group_by(Transect) %>%
   mutate(transect_max = max(Count)) %>%
   filter(transect_max > 0) %>%
   select(-transect_max) %>%
-  
-  # filter to levels between the highest and lowest occurrence of the species
-  # (a detail which we completed, but did not describe in the first submission)
-  ungroup() %>%
-  mutate(max_level = max(Level[Count > 0]),
-         min_level = min(Level[Count > 0])) %>%
-  filter(Level <= max_level,
-         Level >= min_level) %>%
-  select(-max_level, -min_level) %>%
-  
-  # convert count to density (as we did and as we described)
+  # filter out tidal heights above and below the min and mnax recording of the species
+  mutate(max_height = max(tidalheight[Count > 0]),
+         min_height = min(tidalheight[Count > 0])) %>%
+  filter(tidalheight < max_height,
+         tidalheight > min_height) %>%
+  # convert counts to density / m^2
   mutate(density = Count*25) %>%
-  
-  #  summarize replicates of each quadrat, 
+  # summarize replicates of each quadrat (year/transect/level combination), 
   group_by(Year, Transect, Level, Organism, tidalheight) %>%
   summarize(mean_density = mean(density, na.rm=T)) %>%
-  
   # then summarize quadrat means per level across all transects
-  group_by(Year, Level, Organism,tidalheight) %>%
+  group_by(Year, Level, Organism, tidalheight) %>%
   summarize(mean_level_density = mean(mean_density, na.rm=T)) %>%
-  
   # remove levels in which the organism was only present once:
   # (which we describe in our manuscript)
-  group_by(Level,tidalheight) %>%
-  mutate(n_pres = sum(mean_level_density > 0)) %>%
-  filter(n_pres > 1) %>%
-  
-  # change zero density values to 0.01 so the models will run
-  # (not 0.1 as the reviewer did)
-  ungroup() %>%
-  mutate(density_nonzero = ifelse(mean_level_density == 0, 0.01, mean_level_density))
-
-# plot:
-tect_correct %>%
-  ggplot(aes(x = Year, 
-             y = density_nonzero)) +
-  geom_point() +
-  facet_wrap(~Level)
-
-## Model with INLA
-formula <- density_nonzero ~ Year + as.factor(Level)
-tect_mod <- inla(formula, family = "gamma", data = tect_correct)
-round(tect_mod$summary.fixed[1:2,],4) ## Year log-slope = -0.0675
-
-# now check our dataframe with inla:
-formula_jl <- density_nonzero ~ year + tidalheight
-inla_tect_jl <- inla(formula_jl, family = "gamma", data = data_jl)
-round(inla_tect_jl$summary.fixed[1:2,],4) ## Year log-slope = -0.011
-
-# Just from that, we have achieved similar slopes:
-# from reviewer: -0.0598
-# from our data: -0.0580
-# the remaining differences are: 
-# -------------------------------------------------------------------------
-
-
-# -------------------------------------------------------------------------
-
-
-# -------------------------------------------------------------------------
-
-
-
-# second, filter to transects in which the species was seen 
-# (a detail which we completed, but did not describe in the main text)
-tect2 <- tect %>%  
-  group_by(Transect) %>%
-  mutate(transect_max = max(Count)) %>%
-  filter(transect_max > 0) %>%
-  select(-transect_max)
-
-# third, filter to levels between the highest and lowest occurrence of the species
-# (a detail which we completed, but did not describe in the first submission)
-good_levels <- tect2 %>%
-  ungroup() %>%
-  filter(Count > 0) %>%
-  summarize(max_level = max(Level),
-            min_level = min(Level))
-tect3 <- tect2 %>%
-  filter(Level <= good_levels$max_level,
-         Level >= good_levels$min_level)
-
-# fourth, convert count to density (as we did and as we described)
-tect4 <- tect3 %>%
-  mutate(density = Count*25)
-
-# fifth, summarize replicates of each quadrat, 
-# then summarize quadrat means per level across all transects
-tect5 <- tect4 %>% 
-  group_by(Year, Transect, Level, Organism) %>%
-  summarize(mean_density = mean(density, na.rm=T)) %>%
-  group_by(Year, Level, Organism) %>%
-  summarize(mean_level_density = mean(mean_density, na.rm=T))
-
-
-# sixth, remove levels in which the organism was only present once:
-# (which we describe in our manuscript)
-tect6 <- tect5 %>%
   group_by(Level) %>%
   mutate(n_pres = sum(mean_level_density > 0)) %>%
-  filter(n_pres > 1)
-
-
-# sixth, change zero density values to 0.01 so the models will run
-# (not 0.1 as the reviewer did)
-tect7 <- tect6 %>%
-  ungroup() %>%
+  filter(n_pres > 1) %>%
+  # change zero density values to 0.01 so the models will run
+  # (not 0.1 as the reviewer did)
   mutate(density_nonzero = ifelse(mean_level_density == 0, 0.01, mean_level_density))
 
-# plot:
-tect7 %>%
-  ggplot(aes(x = Year, 
+
+
+# plot density over time:
+data_jl %>%
+  ggplot(aes(x = Year,
              y = density_nonzero)) +
   geom_point() +
   facet_wrap(~Level)
 
-## This approach is much faster
+# model with reviewer's method
+formula <- density_nonzero ~ Year + as.factor(tidalheight)
+tect_mod_mt <- inla(formula, family = "gamma", data = tect_mt)
+round(tect_mod_mt$summary.fixed[1:2,],4) ## Year log-slop
+# coefficient = -0.064
 
-formula <- density_nonzero ~ Year + as.factor(Level)
-tect_mod <- inla(formula, family = "gamma", data = tect7)
-round(tect_mod$summary.fixed[1:2,],4) ## Year log-slope = -0.011
-# now check our dataframe with inla:
-formula_jl <- density_nonzero ~ year + tidalheight
-inla_tect_jl <- inla(formula_jl, family = "gamma", data = data_jl)
-round(inla_tect_jl$summary.fixed[1:2,],4) ## Year log-slope = -0.011
+# model with our method:
+tect_mod_jl <- find_regression_slopes(df = tect_mt %>% mutate(year_zero = Year, 
+                                                              tidalheight = as.character(tidalheight)))
+summary(tect_mod_jl)
+extract_slope(tect_mod_jl)
+# using our method, we also get -0.064
 
-# Just from that, we have achieved similar slopes:
-# from reviewer: -0.0598
-# from our data: -0.0580
-# the remaining differences are: 
+
+
+# compare INLA to our method ----------------------------------------------
+data_jl_full <- readr::read_csv("data-processed/abundance-data/count-data-prepped-for-model.csv") 
+data_jl_full <- data_jl_full %>%
+  filter(organism == "Testudinalia testudinalis") %>%
+  mutate(tidalheight = as.character(tidalheight)) 
+
+# model our full data (1982-2023) with INLA
+# try with the reviewer's method (INLA)
+mod_jl_full_inla_formula <- density_nonzero ~ year + tidalheight
+mod_jl_inla_full <- inla(mod_jl_full_inla_formula, family = "gamma", data = data_jl_full)
+round(mod_jl_inla_full$summary.fixed[1:2,],4) ## Year log-slop
+# coefficient = -0.0688
+
+# model our full data (1982-2023) with our workflow:
+# model with our method:
+source("scripts/06-abundance-modeling/06.2-create-model-functions.R")
+mod_jl_full_jl <- find_regression_slopes(df = data_jl_full)
+summary(mod_jl_full_jl)
+extract_slope(mod_jl_full_jl)
+# using our method, we also get -0.0688
+
+
+
+# model highly sampled with both methods ----------------------------------
+data_jl_full_hs <- readr::read_csv("data-processed/abundance-data/count-data-prepped-for-model_HS.csv") 
+data_jl_full_hs <- data_jl_full_hs %>%
+  filter(organism == "Testudinalia testudinalis") %>%
+  mutate(tidalheight = as.character(tidalheight)) 
+
+# model our full highly sampled data (1982-2023) with INLA
+# try with the reviewer's method (INLA)
+mod_jl_full_inla_formula_hs <- density_nonzero ~ year + tidalheight
+mod_jl_inla_full_hs <- inla(mod_jl_full_inla_formula_hs, family = "gamma", data = data_jl_full_hs)
+round(mod_jl_inla_full_hs$summary.fixed[1:2,],4) ## Year log-slop
+# coefficient = -0.0781
+
+# model our full highly sampled data (1982-2023) with our workflow:
+# model with our method:
+mod_jl_full_jl_hs <- find_regression_slopes(df = data_jl_full_hs)
+summary(mod_jl_full_jl_hs)
+extract_slope(mod_jl_full_jl_hs)
+# using our method, we also get -0.0781
+
+
+
+
+
+

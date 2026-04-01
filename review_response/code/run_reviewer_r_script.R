@@ -251,8 +251,9 @@ print(df.check, n=30)
 ## Limpets not found at 5.28 and 5.62 m MLLW; delete these levels
 ## add 0.1 if level_mean = 0
 df.gamma1.final <- df.gamma1 %>%
-  filter(Level <= 5) %>%
+  #filter(Level <= 5) %>%
   mutate(Y = if_else(level_mean == 0,level_mean+0.1,level_mean))
+# NOTE: reviewer changed to 0.1, not 0.01
 unique(df.gamma1.final$Level)
 df.gamma1.final %>% filter(level_mean == 0)
 ## Dataset 2: Drop non-informative zeros
@@ -266,7 +267,7 @@ df.species.table
 df.gamma2 <- full_join(df5,df.species.table, by = c("Transect","Level")) %>%
   
   # NOTE: the following line was not included in the reviewer's original code:
-  #filter(Organism == "Tectura testudinalis") %>%
+  filter(Organism == "Tectura testudinalis") %>%
   
   filter(Sum_present >=1) %>%
   select(Year,Transect,Level,Replicate,Count) %>%
@@ -314,6 +315,84 @@ df.pc.2 <- df.pc %>%
 df.pc.2
 
 
+
+df.gamma1 %>% glimpse()
+df.gamma1 %>%
+  ggplot(aes(x = Year, 
+             y = level_mean)) +
+  geom_point() +
+  labs(title = "df gamma 1")
+
+df.gamma2 %>%
+  ggplot(aes(x = Year, 
+             y = level_mean)) +
+  geom_point() +
+  labs(title = "df gamma 2")
+
+testdf %>%
+  filter(year <= 2017) %>%
+  ggplot(aes(x = year, y = density_nonzero)) +
+  geom_point() +
+  labs(title = "Jake's")
+
+
+df.gamma1.final %>%
+  ggplot(aes(x = Year,
+             y = Level_orig,
+             size = level_mean)) +
+  geom_point() 
+
+testdf %>%
+  filter(year < 2017) %>%
+  ggplot(aes(x = year,
+             y = level,
+             size = density_nonzero)) +
+  geom_point() 
+
+
+df.gamma1.final.2 <- df.gamma1.final %>% 
+  mutate(density_nonzero = Y*25)
+
+
+df.gamma2.final.2 <- df.gamma2.final %>% 
+  mutate(density_nonzero = Y*25)
+
+formula <- density_nonzero ~ Year + as.character(Level)
+fm1 <- inla(formula, family = "gamma", data = df.gamma1.final.2)
+fm1$summary.fixed[1:2,]
+formula_j <-  density_nonzero ~ year + as.factor(tidalheight)
+jake <- inla(formula_j, family = "gamma", data = testdf %>% filter(year <= 2017))
+jake$summary.fixed[1:2,]
+
+
+testdf %>%
+  ggplot(aes(x = year, 
+             y = density_nonzero)) +
+  geom_point() +
+  facet_wrap(~level, scales = "free_y")
+
+df.gamma1.final.2 %>%
+  ggplot(aes(x = Year,
+             y = density_nonzero)) +
+  geom_point() +
+  facet_wrap(~Level_orig, 
+             scales = "free_y")
+
+
+df.gamma1.final.2 %>%
+  ggplot(aes(x = Year,
+             y = density_nonzero)) +
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  facet_wrap(~Level)
+
+testdf %>%
+  filter(year <= 2017) %>%
+  ggplot(aes(x = year,
+             y = density_nonzero)) +
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  facet_wrap(~tidalheight)
 
 
 
